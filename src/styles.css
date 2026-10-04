@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'Ooh Baby';
+    src: url(../src/resource/fonts/OoohBaby-Regular.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 20%;
+    height: 100%;
+    background-color: rgb(245, 245, 245);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px -20px 36px -24px inset;
+}
+
+.sidebar h2 {
+    font-family: 'Ooh Baby', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    padding: 20px;
+    color: black;
+}
+
+@media (max-width: 1280px) {
+    .sidebar {
+        width: 300px;
+    }
+}
