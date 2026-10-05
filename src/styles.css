@@ -3,10 +3,16 @@
     src: url(../src/resource/fonts/OoohBaby-Regular.ttf);
 }
 
+@font-face {
+    font-family: 'EduQLD';
+    src: url(../src/resource/fonts/EduQLD/EduQLDHand-Regular.ttf);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'EduQLD', 'Times New Roman', Times, serif;
 }
 
 body {
@@ -18,34 +24,78 @@ body {
 }
 
 .sidebar {
-    display: grid;
-    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: rgb(245, 245, 245);
-    box-shadow: rgba(0, 0, 0, 0.35) 0px -20px 36px -24px inset;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 21px -14px inset;
+}
+
+.sidebar h2 {
+    font-size: 39px;
+    font-family: 'Ooh Baby', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    padding: 20px;
+    margin-left: 6px;
+    color: black;
+}
+
+.titleDiv {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.titleDiv p {
+    font-size: 18px;
+    margin-left: 31px;
+}
+
+.defaultTab {
+    display: flex;
+    align-items: center;
+    width: 90%;
+    height: 50px;
+    border-radius: 6px;
+    margin-top: 9px;
+    background-color: rgb(255, 255, 255);
+box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.defaultTab p {
+    font-size: 18px;
+    margin-left: 15px;
 }
 
 .main {
     display: flex;
+    text-align: center;
     justify-content: center;
     align-items: end;
 }
 
 .addNote {
-    margin: 30px;
-    padding: 20px 50px;
+    margin: 27px;
+    padding: 6px 45px;
     border: none;
-    border-radius: 10px;
+    border-radius: 9px;
+    font-size: 39px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     transition: 0.3s;
 }
 
-.addNote:hover {
+.addNote:active {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-    color: red;
+    margin: 24px;
     transition: 0.3s;
 }
 
-.sidebar h2 {
-    font-family: 'Ooh Baby', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    padding: 20px;
-    color: black;
+@media (max-width: 960px) {
+    body {
+        display: grid;
+        grid-template-columns: 35% 65%;
+    }
 }
