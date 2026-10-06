@@ -4,6 +4,7 @@ import "./styles.css";
 // HTML OBJECTS
 const body = document.getElementById('body');
 const sidebar = document.getElementById('sidebar');
+const toDoContainer = document.getElementById('todoContainer');
 
 
 
@@ -17,8 +18,17 @@ defaultTab.appendChild(defaultTabP);
 sidebar.appendChild(defaultTab);
 
 
-class ProjectMaker {
 
+//
+const currentTab = 'Default';
+
+const projectsArray = [
+    'Default',
+];
+
+
+// PROJECT MAKER
+class ProjectMaker {
     constructor(title) {
         this.title = title;
     };
@@ -31,7 +41,26 @@ class ProjectMaker {
         newTab.appendChild(newTabP);
         sidebar.appendChild(newTab);
     };
+};
 
+class ToDoMaker {
+    constructor(title, description, dueDate, priority, notes, checklist) {
+        this.title = title;
+        this.description;
+        this.dueDate;
+        this.priority;
+        this.notes;
+        this.checklist;
+    };
+
+    create() {
+        const newToDo = document.createElement('div');
+        newToDo.className = 'toDo';
+        const newToDoP = document.createElement('p');
+        newToDoP.textContent = this.title;
+        newToDo.appendChild(newToDo);
+        sidebar.appendChild(newToDo);
+    };
 };
 
 
@@ -43,6 +72,7 @@ createProjectButton.textContent = '+';
 sidebar.appendChild(createProjectButton);
 
 
+// CREATE PROJECT BUTTON CLICK
 createProjectButton.addEventListener('click', function(e) {
     const projectName = prompt('Enter the project name:');
 
@@ -50,5 +80,22 @@ createProjectButton.addEventListener('click', function(e) {
         const noob = new ProjectMaker(projectName);
         noob.create();
     };
+
+});
+
+// CREATE TODO LIST BUTTON CLICKS
+document.getElementById('addNote').addEventListener('click', function(e) {
+
+    const todo = document.createElement('div');
+    todo.className = 'todo';
+
+    const checkButton = document.createElement('input');
+    checkButton.type = 'checkbox';
+
+    const todoTitle = document.createElement('p');
+    todoTitle.textContent = 'dummy content';
+
+    todo.appendChild(checkButton);
+    toDoContainer.appendChild(todo);
 
 });
