@@ -18,15 +18,6 @@ defaultTab.appendChild(defaultTabP);
 sidebar.appendChild(defaultTab);
 
 
-
-//
-const currentTab = 'Default';
-
-const projectsArray = [
-    'Default',
-];
-
-
 // PROJECT MAKER
 class ProjectMaker {
     constructor(title) {
