@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="main.js"></script>
         <title>ToDo List</title>
     </head>
 
@@ -13,6 +14,9 @@
                 <h2>Dashboard</h2>
                 <p>Projects</p>
             </div>
+            <div id="projectsContainer">
+            </div>
+            <button id="createProjectButton">+</button>
         </div>
 
         <!-- NOTES -->
@@ -22,23 +26,43 @@
                 <div id="popupOverlay" class="overlayContainer">
                     <div class="popup-box">
                         <form action="" class="form-container">
-                            <label for="title">Title</label>
-                            <input type="text" name="" id="title" required>
-                            <label for="description">Description</label>
-                            <textarea name="" id="description"></textarea>
-                            <label for="dueDate">Due Date</label>
-                            <input type="date" name="" id="dueDate" required>
-                            <label for="dueDate">Priority</label>
-                            <div id="radioButtonContainer">
-                                <input type="radio" name="High" id="radio1" required>
-                                <label for="radio1">High</label>
-                                <input type="radio" name="High" id="radio2" required>
-                                <label for="radio1">Medium</label>
-                                <input type="radio" name="High" id="radio3" required>
-                                <label for="radio1">Low</label>
+
+                            <div id="cancelButtonContainer">
+                                <div></div>
+                                <button id="cancelButton"></button>
                             </div>
-                            <button id="cancelButton">Cancel</button>
-                            <button id="confirmButton">Confirm</button>
+
+                            <div class="inputContainer">
+                                <label for="title">Title</label>
+                                <input type="text" name="" id="title" required>
+                            </div>
+
+                            <div class="inputContainer">
+                                <label for="description">Description</label>
+                                <textarea name="" id="description"></textarea>
+                            </div>
+
+                            <div class="inputContainer">
+                                <label for="dueDate">Due Date</label>
+                                <input type="date" name="" id="dueDate" required>
+                            </div>
+
+                            <div class="inputContainer">
+                                <label for="dueDate">Priority</label>
+                                <div id="radioButtonContainer">
+                                    <input type="radio" name="High" id="radio1" required>
+                                    <label for="radio1">High</label>
+                                    <input type="radio" name="High" id="radio2" required>
+                                    <label for="radio1">Medium</label>
+                                    <input type="radio" name="High" id="radio3" required>
+                                    <label for="radio1">Low</label>
+                                </div>
+                            </div>
+
+                            <div class="inputContainer">
+                                <button id="confirmButton">Add</button>
+                            </div>
+
                         </form>
                     </div>
                 </div>
