@@ -8,16 +8,6 @@ const toDoContainer = document.getElementById('todoContainer');
 
 
 
-// VARIABLES
-const defaultTab = document.createElement('div');
-defaultTab.className = 'tabs';
-const defaultTabP = document.createElement('p');
-defaultTabP.textContent = 'Default';
-
-defaultTab.appendChild(defaultTabP);
-sidebar.appendChild(defaultTab);
-
-
 // PROJECT MAKER
 class ProjectMaker {
     constructor(title) {
@@ -26,7 +16,7 @@ class ProjectMaker {
 
     create() {
         const newTab = document.createElement('div');
-        newTab.className = 'tabs';
+        newTab.className = 'projects';
         const newTabP = document.createElement('p');
         newTabP.textContent = this.title;
         newTab.appendChild(newTabP);
@@ -34,23 +24,36 @@ class ProjectMaker {
     };
 };
 
+const defaultTab = new ProjectMaker('Default');
+defaultTab.create();
+
+
+// TO DO MAKER
 class ToDoMaker {
     constructor(title, description, dueDate, priority, notes, checklist) {
         this.title = title;
-        this.description;
-        this.dueDate;
-        this.priority;
-        this.notes;
-        this.checklist;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.notes = notes;
+        this.checklist = checklist;
     };
 
     create() {
-        const newToDo = document.createElement('div');
-        newToDo.className = 'toDo';
-        const newToDoP = document.createElement('p');
-        newToDoP.textContent = this.title;
-        newToDo.appendChild(newToDo);
-        sidebar.appendChild(newToDo);
+        const todo = document.createElement('div');
+        todo.className = 'todo';
+
+        // CHECK BUTTON
+        const checkButton = document.createElement('input');
+        checkButton.type = 'checkbox';
+
+        // TITLE
+        const todoTitle = document.createElement('p');
+        todoTitle.textContent = 'dummy content';
+
+        todo.appendChild(checkButton);
+        todo.appendChild(todoTitle);
+        toDoContainer.appendChild(todo);
     };
 };
 
@@ -71,22 +74,14 @@ createProjectButton.addEventListener('click', function(e) {
         const noob = new ProjectMaker(projectName);
         noob.create();
     };
+});
 
+document.getElementById('tabs').addEventListener('click', function(e) {
+    alert('clicked');
 });
 
 // CREATE TODO LIST BUTTON CLICKS
 document.getElementById('addNote').addEventListener('click', function(e) {
-
-    const todo = document.createElement('div');
-    todo.className = 'todo';
-
-    const checkButton = document.createElement('input');
-    checkButton.type = 'checkbox';
-
-    const todoTitle = document.createElement('p');
-    todoTitle.textContent = 'dummy content';
-
-    todo.appendChild(checkButton);
-    toDoContainer.appendChild(todo);
-
+    const todo = new ToDoMaker();
+    todo.create();
 });
