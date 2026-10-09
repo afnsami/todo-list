@@ -18,6 +18,30 @@
         <!-- NOTES -->
         <div id="main">
             <div id="todoContainer">
+                <!-- INPUT POPUP -->
+                <div id="popupOverlay" class="overlayContainer">
+                    <div class="popup-box">
+                        <form action="" class="form-container">
+                            <label for="title">Title</label>
+                            <input type="text" name="" id="title" required>
+                            <label for="description">Description</label>
+                            <textarea name="" id="description"></textarea>
+                            <label for="dueDate">Due Date</label>
+                            <input type="date" name="" id="dueDate" required>
+                            <label for="dueDate">Priority</label>
+                            <div id="radioButtonContainer">
+                                <input type="radio" name="High" id="radio1" required>
+                                <label for="radio1">High</label>
+                                <input type="radio" name="High" id="radio2" required>
+                                <label for="radio1">Medium</label>
+                                <input type="radio" name="High" id="radio3" required>
+                                <label for="radio1">Low</label>
+                            </div>
+                            <button id="cancelButton">Cancel</button>
+                            <button id="confirmButton">Confirm</button>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <div class="buttonContainer">
