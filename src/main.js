@@ -4,7 +4,8 @@ import "./styles.css";
 // HTML OBJECTS
 const body = document.getElementById('body');
 const sidebar = document.getElementById('sidebar');
-const toDoContainer = document.getElementById('todoContainer');
+const todoContainer = document.getElementById('todoContainer');
+const addNoteButton = document.getElementById('addNote');
 
 
 
@@ -19,7 +20,11 @@ class ProjectMaker {
         newTab.className = 'projects';
         const newTabP = document.createElement('p');
         newTabP.textContent = this.title;
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'deleteButton';
+
         newTab.appendChild(newTabP);
+        newTab.appendChild(deleteButton);
         sidebar.appendChild(newTab);
     };
 };
@@ -43,17 +48,29 @@ class ToDoMaker {
         const todo = document.createElement('div');
         todo.className = 'todo';
 
-        // CHECK BUTTON
+        const section1 = document.createElement('div');
+        section1.className = 'section1';
+        const section2 = document.createElement('div');
+        section2.className = 'section2';
+        const section3 = document.createElement('div');
+        section3.className = 'section3';
+
+        // SECTION 1
         const checkButton = document.createElement('input');
         checkButton.type = 'checkbox';
-
-        // TITLE
         const todoTitle = document.createElement('p');
         todoTitle.textContent = 'dummy content';
 
-        todo.appendChild(checkButton);
-        todo.appendChild(todoTitle);
-        toDoContainer.appendChild(todo);
+        // SECTION 3
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'deleteButton';
+
+        section1.appendChild(checkButton);
+        section1.appendChild(todoTitle);
+        section3.appendChild(deleteButton);
+        todo.appendChild(section1);
+        todo.appendChild(section3)
+        todoContainer.appendChild(todo);
     };
 };
 
@@ -76,12 +93,15 @@ createProjectButton.addEventListener('click', function(e) {
     };
 });
 
-document.getElementById('tabs').addEventListener('click', function(e) {
-    alert('clicked');
-});
+function togglePopup() {
+    const overlay = document.getElementById('popupOverlay');
+    overlay.classList.toggle('show');
+};
 
 // CREATE TODO LIST BUTTON CLICKS
-document.getElementById('addNote').addEventListener('click', function(e) {
+addNoteButton.addEventListener('click', function(e) {
+    // PROMPT INPUT VAR
+    togglePopup();
     const todo = new ToDoMaker();
     todo.create();
 });
