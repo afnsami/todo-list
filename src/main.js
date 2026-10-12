@@ -35,6 +35,8 @@ const defaultTab = new ProjectMaker('Default');
 defaultTab.create();
 const defaultTab2 = new ProjectMaker('New tab');
 defaultTab2.create();
+const defaultTab3 = new ProjectMaker('Extra tab');
+defaultTab3.create();
 
 
 // TODO MAKER
@@ -103,3 +105,19 @@ addNoteButton.addEventListener('click', function(e) {
 cancelButton.addEventListener('click', function(e) {
     togglePopup();
 });
+
+
+// TAB CLICK
+let allProjects = document.querySelectorAll('#projectsContainer > button');
+
+allProjects.forEach.call(allProjects, e => {
+    e.addEventListener('click', tabClick, false)
+});
+
+function tabClick() {
+    [].forEach.call(allProjects, e => {
+    if (e !== this) e.classList.remove('currentTab');
+    });
+
+    this.classList.add('currentTab');
+};
