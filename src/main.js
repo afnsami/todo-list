@@ -31,6 +31,9 @@ class ProjectMaker {
 
 const defaultTab = new ProjectMaker('Default');
 defaultTab.create();
+// SELECTED AS CURRENT TAB
+document.querySelector('#projectsContainer > button').classList = 'projects currentTab';
+document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
 
 // TAB CLICK
 function tabSelectUpdate() {
@@ -41,7 +44,11 @@ function tabSelectUpdate() {
             [].forEach.call(allProjects, e => {
                 if (e !== this) e.classList.remove('currentTab');
             });
+
             this.classList.add('currentTab');
+
+            // CHANGES CURRENT TAB TITLE
+            document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
         }, false);
     });
 };
