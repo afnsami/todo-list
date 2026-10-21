@@ -8,6 +8,26 @@ const addNoteButton = document.getElementById('addNote');
 const cancelButton = document.getElementById("cancelButton");
 
 
+let tabArray = [];
+
+function restoreData() {
+
+    if (localStorage.length <= 0) {
+        let restoreTab = new ProjectMaker('Default');
+        restoreTab.create();
+
+    } else {
+        for (let i = 0; i <= localStorage.length; i++) {
+            tabArray.push(localStorage.key(i));
+
+            let restoreTab = new ProjectMaker(tabArray[i]);
+            restoreTab.create();
+            console.log(tabArray[i]);
+        };
+        console.log(tabArray);
+    };
+};
+
 // PROJECT MAKER
 class ProjectMaker {
     constructor(title) {
@@ -26,11 +46,15 @@ class ProjectMaker {
         newTab.appendChild(newTabP);
         newTab.appendChild(deleteButton);
         document.getElementById('projectsContainer').appendChild(newTab);
+
+        // LOCAL STORAGE
+        localStorage.setItem(this.title, 1);
     };
 };
 
-const defaultTab = new ProjectMaker('Default');
-defaultTab.create();
+tabArray.push('Default');
+restoreData();
+
 // SELECTED AS CURRENT TAB
 document.querySelector('#projectsContainer > button').classList = 'projects currentTab';
 document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
