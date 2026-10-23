@@ -6,6 +6,7 @@ const todoContainer = document.getElementById('todoContainer');
 const createProjectButton = document.getElementById('createProjectButton');
 const addNoteButton = document.getElementById('addNote');
 const cancelButton = document.getElementById("cancelButton");
+const form = document.getElementById('form');
 
 
 let tabArray = [];
@@ -22,9 +23,7 @@ function restoreData() {
 
             let restoreTab = new ProjectMaker(tabArray[i]);
             restoreTab.create();
-            console.log(tabArray[i]);
         };
-        console.log(tabArray);
     };
 };
 
@@ -48,7 +47,7 @@ class ProjectMaker {
         document.getElementById('projectsContainer').appendChild(newTab);
 
         // LOCAL STORAGE
-        localStorage.setItem(this.title, 1);
+        localStorage.setItem(this.title, []);
     };
 };
 
@@ -92,13 +91,9 @@ createProjectButton.addEventListener('click', e => {
 
 // TODO MAKER
 class ToDoMaker {
-    constructor(title, description, dueDate, priority, notes, checklist) {
+    constructor(title, priority) {
         this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
         this.priority = priority;
-        this.notes = notes;
-        this.checklist = checklist;
     };
 
     create() {
@@ -116,14 +111,19 @@ class ToDoMaker {
         const checkButton = document.createElement('input');
         checkButton.type = 'checkbox';
         const todoTitle = document.createElement('p');
-        todoTitle.textContent = 'dummy content';
+        todoTitle.textContent = this.title;
 
         // SECTION 3
+        const priorityP = document.createElement('p');
+        priorityP.textContent = this.priority;
+        priorityP.id = this.priority;
+
         const deleteButton = document.createElement('button');
         deleteButton.className = 'deleteButton';
 
         section1.appendChild(checkButton);
         section1.appendChild(todoTitle);
+        section3.appendChild(priorityP);
         section3.appendChild(deleteButton);
         todo.appendChild(section1);
         todo.appendChild(section3)
@@ -143,4 +143,19 @@ addNoteButton.addEventListener('click', function(e) {
 
 cancelButton.addEventListener('click', function(e) {
     togglePopup();
+});
+
+
+
+form.addEventListener('submit', function(e) {
+    const title = document.getElementById('title');
+    const priority = document.querySelector('input[name="priority"]:checked');
+
+
+    document.getElementById('popupOverlay').classList.toggle('show');
+    const newNote = new ToDoMaker(title.value, priority.id);
+    
+    newNote.create();
+    title.value = '';
+    e.preventDefault();
 });
