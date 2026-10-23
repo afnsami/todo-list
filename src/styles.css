@@ -8,6 +8,11 @@
     src: url(../src/resource/fonts/EduQLD/EduQLDHand-Regular.ttf);
 }
 
+@font-face {
+    font-family: 'EduQLD SemiBold';
+    src: url(../src/resource/fonts/EduQLD/EduQLDHand-SemiBold.ttf);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -178,7 +183,7 @@ body {
 
 #currentTabTitle {
     margin: 21px;
-    opacity: 39%;
+    opacity: 21%;
 }
 
 .projects {
@@ -247,10 +252,29 @@ body {
     height: 20px;
 }
 
-.section1 {
+.section1, .section3 {
     display: flex;
     align-items: center;
-    gap: 21px;
+    justify-content: center;
+    text-align: center;
+    gap: 27px;
+}
+
+.section1 p, .section3 p {
+    font-family: 'EduQLD SemiBold', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* PRIORITY */
+#High {
+    color: rgb(255, 96, 92);
+}
+
+#Medium {
+    color: orange;
+}
+
+#Low {
+    color: green;
 }
 
 input[type='checkbox'] {
