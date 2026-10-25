@@ -37,13 +37,44 @@ class ProjectMaker {
 };
 
 (function restoreData() {
-    localStorage.setItem('Default', '');
+    localStorage.setItem('Default', 'awesome data');
 
     for (let i = 0; i <= localStorage.length; i++) {
         let restoreTab = new ProjectMaker(localStorage.key(i));
         restoreTab.create();
     };
 })();
+
+// PROJECT CREATE BUTTON
+createProjectButton.addEventListener('click', e => {
+    const projectName = prompt('Enter the project name:');
+
+    // IF PROJECT NAME IS EMPTY
+    if (projectName != "") {
+        const defaultTab = new ProjectMaker(projectName);
+        defaultTab.create();
+    } else {
+        const defaultTab = new ProjectMaker('New tab');
+        defaultTab.create();
+    };
+
+    // TABSELECTUPDATE()
+    let allProjects = document.querySelectorAll('#projectsContainer > button');
+
+    allProjects.forEach.call(allProjects, e => {
+        e.addEventListener('click', function() {
+            [].forEach.call(allProjects, e => {
+                if (e !== this) e.classList.remove('currentTab');
+            });
+
+            this.classList.add('currentTab');
+
+            // CHANGES CURRENT TAB TITLE
+            document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
+        }, false);
+    });
+
+});
 
 // TAB CLICK
 (function tabSelectUpdate() {
@@ -68,31 +99,6 @@ class ProjectMaker {
         }, false);
     });
 })();
-
-// PROJECT CREATE BUTTON
-createProjectButton.addEventListener('click', e => {
-    const projectName = prompt('Enter the project name:');
-    if (projectName != "") {
-        const defaultTab = new ProjectMaker(projectName);
-        defaultTab.create();
-
-        // TABSELECTUPDATE()
-        let allProjects = document.querySelectorAll('#projectsContainer > button');
-
-        allProjects.forEach.call(allProjects, e => {
-            e.addEventListener('click', function() {
-                [].forEach.call(allProjects, e => {
-                    if (e !== this) e.classList.remove('currentTab');
-                });
-
-                this.classList.add('currentTab');
-
-                // CHANGES CURRENT TAB TITLE
-                document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
-            }, false);
-        });
-    };
-});
 
 // TODO MAKER
 class TodoMaker {
