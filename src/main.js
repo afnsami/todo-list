@@ -165,7 +165,7 @@ form.addEventListener('submit', function(e) {
     e.preventDefault();
 });
 
-const allprojects = document.querySelector('#projects > button');
-allprojects.addEventListener('click', function(e) {
-    console.log(e.target.id);
-});
+// const allprojects = document.querySelector('#projects > button');
+// allprojects.addEventListener('click', function(e) {
+//     console.log(e.target.id);
+// });
