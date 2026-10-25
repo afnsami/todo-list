@@ -2,20 +2,22 @@
 import "./styles.css";
 
 // HTML OBJECTS
+const projectsContainer = document.getElementById('projectsContainer');
 const todoContainer = document.getElementById('todoContainer');
 const createProjectButton = document.getElementById('createProjectButton');
 const createTodoButton = document.getElementById('addNote');
 const cancelTodoButton = document.getElementById("cancelButton");
 const form = document.getElementById('form');
 
-
 // VARIABLES
 let currentTabId;
 
+
 // PROJECT MAKER
 class ProjectMaker {
-    constructor(title) {
+    constructor(title, data) {
         this.title = title;
+        this.data = data;
     };
 
     create() {
@@ -29,17 +31,18 @@ class ProjectMaker {
 
         newTab.appendChild(newTabP);
         newTab.appendChild(deleteButton);
-        document.getElementById('projectsContainer').appendChild(newTab);
+        projectsContainer.appendChild(newTab);
 
         // LOCAL STORAGE
-        localStorage.setItem(this.title, 'data');
+        localStorage.setItem(this.title, this.data);
     };
 };
 
 (function restoreData() {
-    localStorage.setItem('Default', 'awesome data');
+    let defaultTab = new ProjectMaker('Default', 'awesome');
+    defaultTab.create();
 
-    for (let i = 0; i <= localStorage.length; i++) {
+    for (let i = 1; i <= ((localStorage.length) - 1); i++) {
         let restoreTab = new ProjectMaker(localStorage.key(i));
         restoreTab.create();
     };
