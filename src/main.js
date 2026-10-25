@@ -8,24 +8,18 @@ const addNoteButton = document.getElementById('addNote');
 const cancelButton = document.getElementById("cancelButton");
 const form = document.getElementById('form');
 
-
-let tabArray = [];
+// VARIABLES
+let currentTab = 'Default';
 
 function restoreData() {
+    localStorage.setItem('Default', 'data');
 
-    if (localStorage.length <= 0) {
-        let restoreTab = new ProjectMaker('Default');
+    for (let i = 0; i <= localStorage.length; i++) {
+        let restoreTab = new ProjectMaker(localStorage.key(i));
         restoreTab.create();
-
-    } else {
-        for (let i = 0; i <= localStorage.length; i++) {
-            tabArray.push(localStorage.key(i));
-
-            let restoreTab = new ProjectMaker(tabArray[i]);
-            restoreTab.create();
-        };
     };
 };
+
 
 // PROJECT MAKER
 class ProjectMaker {
@@ -47,11 +41,10 @@ class ProjectMaker {
         document.getElementById('projectsContainer').appendChild(newTab);
 
         // LOCAL STORAGE
-        localStorage.setItem(this.title, []);
+        localStorage.setItem(this.title, 'data');
     };
 };
 
-tabArray.push('Default');
 restoreData();
 
 // SELECTED AS CURRENT TAB
@@ -69,6 +62,7 @@ function tabSelectUpdate() {
             });
 
             this.classList.add('currentTab');
+            currentTab = this.id;
 
             // CHANGES CURRENT TAB TITLE
             document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
@@ -77,7 +71,6 @@ function tabSelectUpdate() {
 };
 
 tabSelectUpdate();
-
 
 // PROJECT CREATE BUTTON
 createProjectButton.addEventListener('click', e => {
@@ -117,7 +110,6 @@ class ToDoMaker {
         const priorityP = document.createElement('p');
         priorityP.textContent = this.priority;
         priorityP.id = this.priority;
-
         const deleteButton = document.createElement('button');
         deleteButton.className = 'deleteButton';
 
@@ -146,16 +138,34 @@ cancelButton.addEventListener('click', function(e) {
 });
 
 
-
+// WHEN ADD BUTTON IS CLICKED
 form.addEventListener('submit', function(e) {
     const title = document.getElementById('title');
+    const description = document.getElementById('description');
     const priority = document.querySelector('input[name="priority"]:checked');
-
 
     document.getElementById('popupOverlay').classList.toggle('show');
     const newNote = new ToDoMaker(title.value, priority.id);
-    
     newNote.create();
+
+    // CLEARS TITLE
     title.value = '';
+
+    // CLEARS DESCRIPTION
+    description.value = '';
+
+    // CLEARS SELECTED RADIO BUTTON
+    let radioButtons = document.getElementsByTagName("input");
+    for (let i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].type == "radio") {
+            radioButtons[i].checked = false;
+        }
+    };
+
     e.preventDefault();
+});
+
+const allprojects = document.querySelector('#projects > button');
+allprojects.addEventListener('click', function(e) {
+    console.log(e.target.id);
 });
