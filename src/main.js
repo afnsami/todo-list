@@ -38,15 +38,58 @@ class ProjectMaker {
     };
 };
 
-(function restoreData() {
-    let defaultTab = new ProjectMaker('Default', 'awesome');
-    defaultTab.create();
+(function restoreProjects() {
+    // IF LOCALSTORAGE IS EMPTY
+    if (localStorage.length == 0) {
+        let defaultTab = new ProjectMaker('Default', 'uselessdata');
+        defaultTab.create();
 
-    for (let i = 1; i <= ((localStorage.length) - 1); i++) {
-        let restoreTab = new ProjectMaker(localStorage.key(i));
-        restoreTab.create();
-    };
+    } else {
+        for (let i = 0; i <= ((localStorage.length) - 1); i++) {
+            let restoreTab = new ProjectMaker(localStorage.key(i), localStorage.getItem(localStorage.key(i)));
+            restoreTab.create();
+        };
+    }
 })();
+
+function restoreTodos() {
+
+    document.querySelectorAll('#projectsContainer > button').forEach(e => {
+        e.addEventListener('click', function() {
+            console.log(e.id);
+        })
+    });
+
+    for (let i = 0; i <= ((localStorage.length) - 1); i++) {
+        const todoData = localStorage.getItem(localStorage.key(i));
+
+        const todoDiv = document.createElement('div');
+        todoDiv.className = 'todo';
+
+        // SECTION 1
+        const section1 = document.createElement('div');
+        section1.className = 'section1';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        const p = document.createElement('p');
+        p.textContent = todoData;
+        section1.appendChild(checkbox);
+        section1.append(p);
+
+        // SECTION 3
+        const section3 = document.createElement('div');
+        section1.className = 'section3';
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'deleteButton';
+        section3.appendChild(deleteButton);
+
+        todoDiv.appendChild(section1);
+        todoDiv.appendChild(section3);
+
+
+        todoContainer.appendChild(todoDiv);
+    };
+};
 
 // PROJECT CREATE BUTTON
 createProjectButton.addEventListener('click', e => {
@@ -142,18 +185,16 @@ class TodoMaker {
         todo.appendChild(section3)
         todoContainer.appendChild(todo);
 
-        // LOCAL STORAGE
-        const projectsList = document.querySelectorAll('.projects');
-        for (var i = 0; i < projectsList.length; i++){
-            projectsList[i].addEventListener("click", function(e){
-                currentTabId = e.target.id;
+        // data array
+        const todoData = [];
+        todoData.push(this.title, this.priority);
+        console.log(todoData);
 
-                localStorage.setItem(e.target.id, title.value);
-            }); 
-        };
-
+        // LOCALSTORAGE
+        localStorage.setItem('Default', todo.childNodes[0].textContent);
     };
 };
+
 
 // TODO CREATE BUTTON
 createTodoButton.addEventListener('click', function(e) {
@@ -183,12 +224,12 @@ form.addEventListener('submit', function(e) {
     description.value = '';
 
     // CLEARS SELECTED RADIO BUTTON
-    let radioButtons = document.getElementsByTagName("input");
-    for (let i = 0; i < radioButtons.length; i++) {
-        if (radioButtons[i].type == "radio") {
-            radioButtons[i].checked = false;
-        }
-    };
+    // let radioButtons = document.getElementsByTagName("input");
+    // for (let i = 0; i < radioButtons.length; i++) {
+    //     if (radioButtons[i].type == "radio") {
+    //         radioButtons[i].checked = false;
+    //     }
+    // };
 
     e.preventDefault();
 });
