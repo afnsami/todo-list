@@ -60,7 +60,7 @@ function restoreTodos() {
             // REMOVES THE PREVIOUS TODOS
             document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
 
-            const todoData = localStorage.getItem(e.id);
+            const todoText = localStorage.getItem(e.id);
 
             const todoDiv = document.createElement('div');
             todoDiv.className = 'todo';
@@ -71,7 +71,7 @@ function restoreTodos() {
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             const p = document.createElement('p');
-            p.textContent = todoData;
+            p.textContent = todoText;
             section1.appendChild(checkbox);
             section1.append(p);
 
@@ -87,12 +87,16 @@ function restoreTodos() {
 
 
             todoContainer.appendChild(todoDiv);
-
         });
     });
+
+    // AUTO CLICKS THE FIRST TAB
+    document.querySelector('#projectsContainer > button').click();
 };
 
 restoreTodos();
+
+
 
 // PROJECT CREATE BUTTON
 createProjectButton.addEventListener('click', e => {
@@ -151,9 +155,10 @@ createProjectButton.addEventListener('click', e => {
 
 // TODO MAKER
 class TodoMaker {
-    constructor(title, priority) {
+    constructor(title, priority, todoArray) {
         this.title = title;
         this.priority = priority;
+        this.todoArray = todoArray;
     };
 
     create() {
@@ -188,13 +193,25 @@ class TodoMaker {
         todo.appendChild(section3)
         todoContainer.appendChild(todo);
 
+
+        // --------------NESTED ARRAY------------
+
         // data array
         const todoData = [];
-        todoData.push(this.title, this.priority);
+
+        this.todoArray = [];
+        // todoArray.push('data');
+        todoData.push(this.title, this.priority, this.todoArray);
+
+
         console.log(todoData);
 
+
+        const currentTab = document.querySelector('.currentTab');
+        console.log(currentTab.id);
+
         // LOCALSTORAGE
-        localStorage.setItem('Default', todo.childNodes[0].textContent);
+        localStorage.setItem(currentTab.id, todo.childNodes[0].textContent);
     };
 };
 
