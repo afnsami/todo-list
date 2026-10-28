@@ -56,40 +56,43 @@ function restoreTodos() {
 
     document.querySelectorAll('#projectsContainer > button').forEach(e => {
         e.addEventListener('click', function() {
-            console.log(e.id);
-        })
+
+            // REMOVES THE PREVIOUS TODOS
+            document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
+
+            const todoData = localStorage.getItem(e.id);
+
+            const todoDiv = document.createElement('div');
+            todoDiv.className = 'todo';
+
+            // SECTION 1
+            const section1 = document.createElement('div');
+            section1.className = 'section1';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            const p = document.createElement('p');
+            p.textContent = todoData;
+            section1.appendChild(checkbox);
+            section1.append(p);
+
+            // SECTION 3
+            const section3 = document.createElement('div');
+            section1.className = 'section3';
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton';
+            section3.appendChild(deleteButton);
+
+            todoDiv.appendChild(section1);
+            todoDiv.appendChild(section3);
+
+
+            todoContainer.appendChild(todoDiv);
+
+        });
     });
-
-    for (let i = 0; i <= ((localStorage.length) - 1); i++) {
-        const todoData = localStorage.getItem(localStorage.key(i));
-
-        const todoDiv = document.createElement('div');
-        todoDiv.className = 'todo';
-
-        // SECTION 1
-        const section1 = document.createElement('div');
-        section1.className = 'section1';
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        const p = document.createElement('p');
-        p.textContent = todoData;
-        section1.appendChild(checkbox);
-        section1.append(p);
-
-        // SECTION 3
-        const section3 = document.createElement('div');
-        section1.className = 'section3';
-        const deleteButton = document.createElement('button');
-        deleteButton.className = 'deleteButton';
-        section3.appendChild(deleteButton);
-
-        todoDiv.appendChild(section1);
-        todoDiv.appendChild(section3);
-
-
-        todoContainer.appendChild(todoDiv);
-    };
 };
+
+restoreTodos();
 
 // PROJECT CREATE BUTTON
 createProjectButton.addEventListener('click', e => {
