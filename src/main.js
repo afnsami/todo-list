@@ -41,7 +41,7 @@ class ProjectMaker {
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', 'uselessdata');
+        let defaultTab = new ProjectMaker('Default', ['Unfinished task']);
         defaultTab.create();
 
     } else {
@@ -153,15 +153,22 @@ createProjectButton.addEventListener('click', e => {
     });
 })();
 
+
+
+
+
+let todoData = [];
+let todoArray = [];
+let oldTab = document.querySelector('.projects');
+
 // TODO MAKER
 class TodoMaker {
-    constructor(title, priority, todoArray) {
+    constructor(title, priority) {
         this.title = title;
         this.priority = priority;
-        this.todoArray = todoArray;
     };
 
-    create() {
+    create() {        
         const todo = document.createElement('div');
         todo.className = 'todo';
 
@@ -193,28 +200,34 @@ class TodoMaker {
         todo.appendChild(section3)
         todoContainer.appendChild(todo);
 
-
+        
         // --------------NESTED ARRAY------------
 
-        // data array
-        const todoData = [];
-
-        this.todoArray = [];
-        // todoArray.push('data');
-        todoData.push(this.title, this.priority, this.todoArray);
-
-
-        console.log(todoData);
-
-
-        const currentTab = document.querySelector('.currentTab');
-        console.log(currentTab.id);
+        todoArray.push(todoTitle.textContent); //INSERTS TODO INTO AN ARRAY
 
         // LOCALSTORAGE
-        localStorage.setItem(currentTab.id, todo.childNodes[0].textContent);
+        const currentTab = document.querySelector('.currentTab');
+
+        if (currentTab.id == oldTab.id) {
+            localStorage.setItem(currentTab.id, [todoArray]);
+
+        } else {
+            todoArray = []; //EMPTIES THE PREVIOUS ARRAY
+
+            const todoArrayString = localStorage.getItem(currentTab.id); //GETS THE DATA FROM CURRENT SELECTED PROJECT
+            const stringToArray = todoArrayString.split(',');
+
+            todoArray.push(stringToArray);
+            todoArray.pop();
+            todoArray.push(todoTitle.textContent);
+
+            localStorage.setItem(currentTab.id, [todoArray]);
+            oldTab = currentTab;
+        };
+
+        todoData.push(todoArray);  
     };
 };
-
 
 // TODO CREATE BUTTON
 createTodoButton.addEventListener('click', function(e) {
