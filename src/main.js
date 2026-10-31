@@ -33,15 +33,19 @@ class ProjectMaker {
         newTab.appendChild(deleteButton);
         projectsContainer.appendChild(newTab);
 
+        // REMOVES THE PREVIOUS TODOS
+        document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
+
         // LOCAL STORAGE
         localStorage.setItem(this.title, this.data);
     };
 };
 
+
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['Unfinished task']);
+        let defaultTab = new ProjectMaker('Default', ['Empty task']);
         defaultTab.create();
 
     } else {
@@ -52,7 +56,8 @@ class ProjectMaker {
     }
 })();
 
-function restoreTodos() {
+
+(function restoreTodos() {
 
     document.querySelectorAll('#projectsContainer > button').forEach(e => {
         e.addEventListener('click', function() {
@@ -92,10 +97,7 @@ function restoreTodos() {
 
     // AUTO CLICKS THE FIRST TAB
     document.querySelector('#projectsContainer > button').click();
-};
-
-restoreTodos();
-
+})();
 
 
 // PROJECT CREATE BUTTON
@@ -104,12 +106,14 @@ createProjectButton.addEventListener('click', e => {
 
     // IF PROJECT NAME IS EMPTY
     if (projectName != "") {
-        const defaultTab = new ProjectMaker(projectName);
+        const defaultTab = new ProjectMaker(projectName, []);
         defaultTab.create();
     } else {
         const defaultTab = new ProjectMaker('New tab');
         defaultTab.create();
     };
+
+
 
     // TABSELECTUPDATE()
     let allProjects = document.querySelectorAll('#projectsContainer > button');
@@ -127,7 +131,10 @@ createProjectButton.addEventListener('click', e => {
         }, false);
     });
 
+    // CLICKS THE CREATED PROJECT
+    document.getElementById('projectsContainer').lastChild.click();
 });
+
 
 // TAB CLICK
 (function tabSelectUpdate() {
@@ -154,12 +161,10 @@ createProjectButton.addEventListener('click', e => {
 })();
 
 
-
-
-
 let todoData = [];
 let todoArray = [];
 let oldTab = document.querySelector('.projects');
+
 
 // TODO MAKER
 class TodoMaker {
@@ -200,7 +205,7 @@ class TodoMaker {
         todo.appendChild(section3)
         todoContainer.appendChild(todo);
 
-        
+
         // --------------NESTED ARRAY------------
 
         todoArray.push(todoTitle.textContent); //INSERTS TODO INTO AN ARRAY
@@ -229,16 +234,19 @@ class TodoMaker {
     };
 };
 
+
 // TODO CREATE BUTTON
 createTodoButton.addEventListener('click', function(e) {
     const overlay = document.getElementById('popupOverlay');
     overlay.classList.toggle('show');
 });
 
+
 cancelTodoButton.addEventListener('click', function(e) {
     const overlay = document.getElementById('popupOverlay');
     overlay.classList.toggle('show');
 });
+
 
 // WHEN ADD BUTTON IS CLICKED
 form.addEventListener('submit', function(e) {
