@@ -45,7 +45,7 @@ createProjectButton.addEventListener('click', e => {
 
     // IF PROJECT NAME IS EMPTY
     if (projectName != "") {
-        const defaultTab = new ProjectMaker(projectName);
+        const defaultTab = new ProjectMaker(projectName, []);
         defaultTab.create();
     } else {
         const defaultTab = new ProjectMaker('New tab');
@@ -79,7 +79,7 @@ createProjectButton.addEventListener('click', e => {
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['New task']);
+        let defaultTab = new ProjectMaker('Default', []);
         defaultTab.create();
         let newTab = new ProjectMaker('NewTab', []);
         newTab.create();
@@ -119,7 +119,7 @@ createProjectButton.addEventListener('click', e => {
 
 
 let todoData = [];
-let todoArray = [];
+let todoArray = [localStorage.getItem(document.querySelector('.currentTab').id)]; //GETS THE TODOS OF CURRENT PROJECT
 let oldTab = document.querySelector('.projects');
 
 
@@ -173,7 +173,7 @@ class TodoMaker {
             localStorage.setItem(currentTab.id, [todoArray]);
 
         } else {
-            todoArray = []; //EMPTIES THE PREVIOUS ARRAY
+            todoArray = [localStorage.getItem(currentTab.id)]; //GETS THE TODOS OF CURRENT PROJECT
 
             const todoArrayString = localStorage.getItem(currentTab.id); //GETS THE DATA FROM CURRENT SELECTED PROJECT
             const stringToArray = todoArrayString.split(',');
