@@ -9,6 +9,7 @@ const createTodoButton = document.getElementById('addNote');
 const cancelTodoButton = document.getElementById("cancelButton");
 const form = document.getElementById('form');
 
+
 // PROJECT MAKER
 class ProjectMaker {
     constructor(title, data) {
@@ -78,8 +79,10 @@ createProjectButton.addEventListener('click', e => {
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['Empty task']);
+        let defaultTab = new ProjectMaker('Default', ['New task']);
         defaultTab.create();
+        let newTab = new ProjectMaker('NewTab', []);
+        newTab.create();
 
     } else {
         for (let i = 0; i <= ((localStorage.length) - 1); i++) {
@@ -127,7 +130,7 @@ class TodoMaker {
         this.priority = priority;
     };
 
-    create() {        
+    create() {
         const todo = document.createElement('div');
         todo.className = 'todo';
 
@@ -161,19 +164,15 @@ class TodoMaker {
 
 
         // --------------NESTED ARRAY------------
-
-        todoArray.push(todoTitle.textContent); //INSERTS TODO INTO AN ARRAY
+        todoArray.push(this.title); //INSERTS TODO INTO AN ARRAY
 
         // LOCALSTORAGE
         const currentTab = document.querySelector('.currentTab');
 
         if (currentTab.id == oldTab.id) {
-            console.log(true);
             localStorage.setItem(currentTab.id, [todoArray]);
 
         } else {
-            console.log(false);
-
             todoArray = []; //EMPTIES THE PREVIOUS ARRAY
 
             const todoArrayString = localStorage.getItem(currentTab.id); //GETS THE DATA FROM CURRENT SELECTED PROJECT
@@ -187,7 +186,7 @@ class TodoMaker {
             oldTab = currentTab;
         };
 
-        todoData.push(todoArray);  
+        todoData.push(todoArray);
     };
 };
 
@@ -208,40 +207,42 @@ cancelTodoButton.addEventListener('click', function(e) {
 
 // RESTORES TODOS
 (function restoreTodos() {
-
     document.querySelectorAll('#projectsContainer > button').forEach(e => {
         e.addEventListener('click', function() {
 
             // REMOVES THE PREVIOUS TODOS
             document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
 
-            const todoText = localStorage.getItem(e.id);
+            const todo = document.createElement('div');
+            todo.className = 'todo';
 
-            const todoDiv = document.createElement('div');
-            todoDiv.className = 'todo';
-
-            // SECTION 1
             const section1 = document.createElement('div');
             section1.className = 'section1';
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            const p = document.createElement('p');
-            p.textContent = todoText;
-            section1.appendChild(checkbox);
-            section1.append(p);
-
-            // SECTION 3
+            const section2 = document.createElement('div');
+            section2.className = 'section2';
             const section3 = document.createElement('div');
             section1.className = 'section3';
+
+            // SECTION 1
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            const todoTitle = document.createElement('p');
+            todoTitle.textContent = localStorage.getItem(e.id); //GETS CURRENT TODO TITLE
+
+            // SECTION 3
+            const priorityP = document.createElement('p');
+            priorityP.textContent = this.priority;
+            priorityP.id = this.priority;
             const deleteButton = document.createElement('button');
             deleteButton.className = 'deleteButton';
+
+            section1.appendChild(checkbox);
+            section1.append(todoTitle);
+            section3.appendChild(priorityP);
             section3.appendChild(deleteButton);
-
-            todoDiv.appendChild(section1);
-            todoDiv.appendChild(section3);
-
-
-            todoContainer.appendChild(todoDiv);
+            todo.appendChild(section1);
+            todo.appendChild(section3);
+            todoContainer.appendChild(todo);
         });
     });
 
