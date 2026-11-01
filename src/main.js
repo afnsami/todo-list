@@ -9,10 +9,6 @@ const createTodoButton = document.getElementById('addNote');
 const cancelTodoButton = document.getElementById("cancelButton");
 const form = document.getElementById('form');
 
-// VARIABLES
-let currentTabId;
-
-
 // PROJECT MAKER
 class ProjectMaker {
     constructor(title, data) {
@@ -42,71 +38,13 @@ class ProjectMaker {
 };
 
 
-(function restoreProjects() {
-    // IF LOCALSTORAGE IS EMPTY
-    if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['Empty task']);
-        defaultTab.create();
-
-    } else {
-        for (let i = 0; i <= ((localStorage.length) - 1); i++) {
-            let restoreTab = new ProjectMaker(localStorage.key(i), localStorage.getItem(localStorage.key(i)));
-            restoreTab.create();
-        };
-    }
-})();
-
-
-(function restoreTodos() {
-
-    document.querySelectorAll('#projectsContainer > button').forEach(e => {
-        e.addEventListener('click', function() {
-
-            // REMOVES THE PREVIOUS TODOS
-            document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
-
-            const todoText = localStorage.getItem(e.id);
-
-            const todoDiv = document.createElement('div');
-            todoDiv.className = 'todo';
-
-            // SECTION 1
-            const section1 = document.createElement('div');
-            section1.className = 'section1';
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            const p = document.createElement('p');
-            p.textContent = todoText;
-            section1.appendChild(checkbox);
-            section1.append(p);
-
-            // SECTION 3
-            const section3 = document.createElement('div');
-            section1.className = 'section3';
-            const deleteButton = document.createElement('button');
-            deleteButton.className = 'deleteButton';
-            section3.appendChild(deleteButton);
-
-            todoDiv.appendChild(section1);
-            todoDiv.appendChild(section3);
-
-
-            todoContainer.appendChild(todoDiv);
-        });
-    });
-
-    // AUTO CLICKS THE FIRST TAB
-    document.querySelector('#projectsContainer > button').click();
-})();
-
-
-// PROJECT CREATE BUTTON
+// CLICKED PROJECT + BUTTON
 createProjectButton.addEventListener('click', e => {
     const projectName = prompt('Enter the project name:');
 
     // IF PROJECT NAME IS EMPTY
     if (projectName != "") {
-        const defaultTab = new ProjectMaker(projectName, []);
+        const defaultTab = new ProjectMaker(projectName);
         defaultTab.create();
     } else {
         const defaultTab = new ProjectMaker('New tab');
@@ -134,6 +72,22 @@ createProjectButton.addEventListener('click', e => {
     // CLICKS THE CREATED PROJECT
     document.getElementById('projectsContainer').lastChild.click();
 });
+
+
+// RESTORES PROJECTS FROM LOCALSTORAGE
+(function restoreProjects() {
+    // IF LOCALSTORAGE IS EMPTY
+    if (localStorage.length == 0) {
+        let defaultTab = new ProjectMaker('Default', ['Empty task']);
+        defaultTab.create();
+
+    } else {
+        for (let i = 0; i <= ((localStorage.length) - 1); i++) {
+            let restoreTab = new ProjectMaker(localStorage.key(i), localStorage.getItem(localStorage.key(i)));
+            restoreTab.create();
+        };
+    }
+})();
 
 
 // TAB CLICK
@@ -214,9 +168,12 @@ class TodoMaker {
         const currentTab = document.querySelector('.currentTab');
 
         if (currentTab.id == oldTab.id) {
+            console.log(true);
             localStorage.setItem(currentTab.id, [todoArray]);
 
         } else {
+            console.log(false);
+
             todoArray = []; //EMPTIES THE PREVIOUS ARRAY
 
             const todoArrayString = localStorage.getItem(currentTab.id); //GETS THE DATA FROM CURRENT SELECTED PROJECT
@@ -235,21 +192,68 @@ class TodoMaker {
 };
 
 
-// TODO CREATE BUTTON
+// CLICKED TODO + BUTTON
 createTodoButton.addEventListener('click', function(e) {
     const overlay = document.getElementById('popupOverlay');
     overlay.classList.toggle('show');
 });
 
 
+// WHEN FORM IS CANCELLED
 cancelTodoButton.addEventListener('click', function(e) {
     const overlay = document.getElementById('popupOverlay');
     overlay.classList.toggle('show');
 });
 
 
+// RESTORES TODOS
+(function restoreTodos() {
+
+    document.querySelectorAll('#projectsContainer > button').forEach(e => {
+        e.addEventListener('click', function() {
+
+            // REMOVES THE PREVIOUS TODOS
+            document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
+
+            const todoText = localStorage.getItem(e.id);
+
+            const todoDiv = document.createElement('div');
+            todoDiv.className = 'todo';
+
+            // SECTION 1
+            const section1 = document.createElement('div');
+            section1.className = 'section1';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            const p = document.createElement('p');
+            p.textContent = todoText;
+            section1.appendChild(checkbox);
+            section1.append(p);
+
+            // SECTION 3
+            const section3 = document.createElement('div');
+            section1.className = 'section3';
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton';
+            section3.appendChild(deleteButton);
+
+            todoDiv.appendChild(section1);
+            todoDiv.appendChild(section3);
+
+
+            todoContainer.appendChild(todoDiv);
+        });
+    });
+
+    // AUTO CLICKS THE FIRST TAB
+    document.querySelector('#projectsContainer > button').click();
+})();
+
+
 // WHEN ADD BUTTON IS CLICKED
 form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
     const title = document.getElementById('title');
     const description = document.getElementById('description');
     const priority = document.querySelector('input[name="priority"]:checked');
@@ -260,7 +264,6 @@ form.addEventListener('submit', function(e) {
 
     // CLEARS TITLE
     title.value = '';
-
     // CLEARS DESCRIPTION
     description.value = '';
 
@@ -271,6 +274,4 @@ form.addEventListener('submit', function(e) {
     //         radioButtons[i].checked = false;
     //     }
     // };
-
-    e.preventDefault();
 });
