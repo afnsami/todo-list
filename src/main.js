@@ -170,11 +170,12 @@ class TodoMaker {
         const currentTab = document.querySelector('.currentTab');
 
         if (currentTab.id == oldTab.id) {
+            if (todoArray[0] === "") todoArray.shift();
             localStorage.setItem(currentTab.id, [todoArray]);
 
         } else {
             todoArray = [localStorage.getItem(currentTab.id)]; //GETS THE TODOS OF CURRENT PROJECT
-
+            if (todoArray[0] === "") todoArray.shift();
             const todoArrayString = localStorage.getItem(currentTab.id); //GETS THE DATA FROM CURRENT SELECTED PROJECT
             const stringToArray = todoArrayString.split(',');
 
