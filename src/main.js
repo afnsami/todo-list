@@ -35,6 +35,7 @@ class ProjectMaker {
 
         // LOCAL STORAGE
         localStorage.setItem(this.title, this.data);
+        restoreTodos();
     };
 };
 
@@ -51,8 +52,6 @@ createProjectButton.addEventListener('click', e => {
         const defaultTab = new ProjectMaker('New tab');
         defaultTab.create();
     };
-
-
 
     // TABSELECTUPDATE()
     let allProjects = document.querySelectorAll('#projectsContainer > button');
@@ -79,10 +78,8 @@ createProjectButton.addEventListener('click', e => {
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', []);
+        let defaultTab = new ProjectMaker('Default', ['A task']);
         defaultTab.create();
-        let newTab = new ProjectMaker('NewTab', []);
-        newTab.create();
 
     } else {
         for (let i = 0; i <= ((localStorage.length) - 1); i++) {
@@ -178,7 +175,6 @@ class TodoMaker {
             if (todoArray[0] === "") todoArray.shift();
             const todoArrayString = localStorage.getItem(currentTab.id); //GETS THE DATA FROM CURRENT SELECTED PROJECT
             const stringToArray = todoArrayString.split(',');
-            // console.log(stringToArray);
 
             todoArray.push(stringToArray);
             todoArray.pop();
@@ -208,7 +204,7 @@ cancelTodoButton.addEventListener('click', function(e) {
 
 
 // RESTORES TODOS
-(function restoreTodos() {
+function restoreTodos() {
     document.querySelectorAll('#projectsContainer > button').forEach(e => {
         e.addEventListener('click', function() {
 
@@ -256,7 +252,9 @@ cancelTodoButton.addEventListener('click', function(e) {
 
     // AUTO CLICKS THE FIRST TAB
     document.querySelector('#projectsContainer > button').click();
-})();
+};
+
+restoreTodos();
 
 
 // WHEN ADD BUTTON IS CLICKED
