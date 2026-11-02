@@ -115,7 +115,6 @@ createProjectButton.addEventListener('click', e => {
 })();
 
 
-let todoData = [];
 let todoArray = [localStorage.getItem(document.querySelector('.currentTab').id)]; //GETS THE TODOS OF CURRENT PROJECT
 let oldTab = document.querySelector('.projects');
 
@@ -183,8 +182,6 @@ class TodoMaker {
             localStorage.setItem(currentTab.id, [todoArray]);
             oldTab = currentTab;
         };
-
-        todoData.push(todoArray);
     };
 };
 
