@@ -78,7 +78,7 @@ createProjectButton.addEventListener('click', e => {
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['A task']);
+        let defaultTab = new ProjectMaker('Default', []);
         defaultTab.create();
 
     } else {
@@ -214,39 +214,40 @@ function restoreTodos() {
             const currentProjectTodosArray = localStorage.getItem(e.id).split(",");
 
             for (let i = 0; i <= (currentProjectTodosArray.length - 1); i++) {
-                const todo = document.createElement('div');
-                todo.className = 'todo';
 
-                const section1 = document.createElement('div');
-                section1.className = 'section1';
-                const section2 = document.createElement('div');
-                section2.className = 'section2';
-                const section3 = document.createElement('div');
-                section1.className = 'section3';
+                if (currentProjectTodosArray[i] != "") {
+                    const todo = document.createElement('div');
+                    todo.className = 'todo';
 
-                // SECTION 1
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                const todoTitle = document.createElement('p');
-                todoTitle.textContent = currentProjectTodosArray[i]; //GETS CURRENT TODO TITLE
+                    const section1 = document.createElement('div');
+                    section1.className = 'section1';
+                    const section2 = document.createElement('div');
+                    section2.className = 'section2';
+                    const section3 = document.createElement('div');
+                    section1.className = 'section3';
 
-                // SECTION 3
-                const priorityP = document.createElement('p');
-                priorityP.textContent = this.priority;
-                priorityP.id = this.priority;
-                const deleteButton = document.createElement('button');
-                deleteButton.className = 'deleteButton';
+                    // SECTION 1
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    const todoTitle = document.createElement('p');
+                    todoTitle.textContent = currentProjectTodosArray[i]; //GETS CURRENT TODO TITLE
 
-                section1.appendChild(checkbox);
-                section1.append(todoTitle);
-                section3.appendChild(priorityP);
-                section3.appendChild(deleteButton);
-                todo.appendChild(section1);
-                todo.appendChild(section3);
-                todoContainer.appendChild(todo);
+                    // SECTION 3
+                    const priorityP = document.createElement('p');
+                    priorityP.textContent = this.priority;
+                    priorityP.id = this.priority;
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'deleteButton';
+
+                    section1.appendChild(checkbox);
+                    section1.append(todoTitle);
+                    section3.appendChild(priorityP);
+                    section3.appendChild(deleteButton);
+                    todo.appendChild(section1);
+                    todo.appendChild(section3);
+                    todoContainer.appendChild(todo);
+                };
             };
-
-
         });
     });
 
