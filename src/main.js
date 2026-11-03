@@ -46,7 +46,7 @@ createProjectButton.addEventListener('click', e => {
 
     // IF PROJECT NAME IS EMPTY
     if (projectName != "") {
-        const defaultTab = new ProjectMaker(projectName, []);
+        const defaultTab = new ProjectMaker(projectName, ["+"]);
         defaultTab.create();
     } else {
         const defaultTab = new ProjectMaker('New tab');
@@ -78,7 +78,7 @@ createProjectButton.addEventListener('click', e => {
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', []);
+        let defaultTab = new ProjectMaker('Default', ['+']);
         defaultTab.create();
 
     } else {
@@ -115,9 +115,7 @@ createProjectButton.addEventListener('click', e => {
 })();
 
 
-let todoArray = [localStorage.getItem(document.querySelector('.currentTab').id)]; //GETS THE TODOS OF CURRENT PROJECT
 let oldTab = document.querySelector('.projects');
-
 
 // TODO MAKER
 class TodoMaker {
@@ -160,26 +158,41 @@ class TodoMaker {
 
 
         // --------------NESTED ARRAY------------
-        todoArray.push(this.title); //INSERTS TODO INTO AN ARRAY
+        
+
 
         // LOCALSTORAGE
         const currentTab = document.querySelector('.currentTab');
 
         if (currentTab.id == oldTab.id) {
-            if (todoArray[0] === "") todoArray.shift();
-            localStorage.setItem(currentTab.id, [todoArray]);
+
+            const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
+            const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
+            const priorityList = restoredDataString[1].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
+
+            if (todoList[0] === "") todoList.shift(); //REMOVES FIRST EMPTY ARRAY ELEMENT
+            if (priorityList[0] === "") priorityList.shift(); //REMOVES FIRST EMPTY ARRAY ELEMENT
+
+            todoList.push(this.title); //INSERTS TODO INTO AN ARRAY
+            priorityList.push(this.priority);
+
+            const dataString = (todoList) + "+" + (priorityList); //CONTAINS ALL THE DATA
+            localStorage.setItem(currentTab.id, [dataString]);
 
         } else {
-            todoArray = [localStorage.getItem(currentTab.id)]; //GETS THE TODOS OF CURRENT PROJECT
-            if (todoArray[0] === "") todoArray.shift();
-            const todoArrayString = localStorage.getItem(currentTab.id); //GETS THE DATA FROM CURRENT SELECTED PROJECT
-            const stringToArray = todoArrayString.split(',');
+            const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
+            const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
+            const priorityList = restoredDataString[1].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
 
-            todoArray.push(stringToArray);
-            todoArray.pop();
-            todoArray.push(todoTitle.textContent);
+            if (todoList[0] === "") todoList.shift(); //REMOVES FIRST EMPTY ARRAY ELEMENT
+            if (priorityList[0] === "") priorityList.shift(); //REMOVES FIRST EMPTY ARRAY ELEMENT
 
-            localStorage.setItem(currentTab.id, [todoArray]);
+            todoList.push(this.title); //INSERTS TODO INTO AN ARRAY
+            // todoList.pop();
+            priorityList.push(this.priority);
+
+            const dataString = (todoList) + "+" + (priorityList); //CONTAINS ALL THE DATA
+            localStorage.setItem(currentTab.id, [dataString]);
             oldTab = currentTab;
         };
     };
