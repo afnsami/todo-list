@@ -221,9 +221,11 @@ function restoreTodos() {
             // REMOVES THE PREVIOUS TODOS
             document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
 
-            const currentProjectTodosArray = localStorage.getItem(e.id).split(",");
+            const currentProjectTodosArray = localStorage.getItem(e.id).split("+");
+            const todoList = currentProjectTodosArray[0].split(",");
+            const priorityList = currentProjectTodosArray[1].split(",");
 
-            for (let i = 0; i <= (currentProjectTodosArray.length - 1); i++) {
+            for (let i = 0; i <= (todoList.length - 1); i++) {
 
                 if (currentProjectTodosArray[i] != "") {
                     const todo = document.createElement('div');
@@ -234,18 +236,18 @@ function restoreTodos() {
                     const section2 = document.createElement('div');
                     section2.className = 'section2';
                     const section3 = document.createElement('div');
-                    section1.className = 'section3';
+                    section3.className = 'section3';
 
                     // SECTION 1
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
                     const todoTitle = document.createElement('p');
-                    todoTitle.textContent = currentProjectTodosArray[i]; //GETS CURRENT TODO TITLE
+                    todoTitle.textContent = todoList[i]; //GETS CURRENT TODO TITLE
 
                     // SECTION 3
                     const priorityP = document.createElement('p');
-                    priorityP.textContent = this.priority;
-                    priorityP.id = this.priority;
+                    priorityP.textContent = priorityList[i];
+                    priorityP.id = priorityList[i];
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'deleteButton';
 
