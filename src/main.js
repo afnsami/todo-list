@@ -46,10 +46,10 @@ createProjectButton.addEventListener('click', e => {
 
     // IF PROJECT NAME IS EMPTY
     if (projectName != "") {
-        const defaultTab = new ProjectMaker(projectName, ["+"]);
+        const defaultTab = new ProjectMaker(projectName, ["++"]);
         defaultTab.create();
     } else {
-        const defaultTab = new ProjectMaker('New tab');
+        const defaultTab = new ProjectMaker('New tab', ["++"]);
         defaultTab.create();
     };
 
@@ -78,7 +78,7 @@ createProjectButton.addEventListener('click', e => {
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['+']);
+        let defaultTab = new ProjectMaker('Default', ['++']);
         defaultTab.create();
 
     } else {
@@ -119,8 +119,9 @@ let oldTab = document.querySelector('.projects');
 
 // TODO MAKER
 class TodoMaker {
-    constructor(title, priority) {
+    constructor(title, description, priority) {
         this.title = title;
+        this.description = description;
         this.priority = priority;
     };
 
@@ -141,6 +142,11 @@ class TodoMaker {
         const todoTitle = document.createElement('p');
         todoTitle.textContent = this.title;
 
+        // SECTION 2
+        const descriptionP = document.createElement('p');
+        descriptionP.className = 'description';
+        descriptionP.textContent = this.description;
+
         // SECTION 3
         const priorityP = document.createElement('p');
         priorityP.textContent = this.priority;
@@ -150,48 +156,51 @@ class TodoMaker {
 
         section1.appendChild(checkButton);
         section1.appendChild(todoTitle);
+        section2.appendChild(descriptionP);
         section3.appendChild(priorityP);
         section3.appendChild(deleteButton);
         todo.appendChild(section1);
-        todo.appendChild(section3)
+        todo.appendChild(section2);
+        todo.appendChild(section3);
         todoContainer.appendChild(todo);
-
-
-        // --------------NESTED ARRAY------------
-        
-
 
         // LOCALSTORAGE
         const currentTab = document.querySelector('.currentTab');
 
         if (currentTab.id == oldTab.id) {
-
             const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
+
+            // TODO DIV SECTIONS
             const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
-            const priorityList = restoredDataString[1].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
+            const descriptionList = restoredDataString[1].split(",");  //GETS THE DESCRIPTIONS OF CURRENT PROJECT
+            const priorityList = restoredDataString[2].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
 
-            if (todoList[0] === "") todoList.shift(); //REMOVES FIRST EMPTY ARRAY ELEMENT
-            if (priorityList[0] === "") priorityList.shift(); //REMOVES FIRST EMPTY ARRAY ELEMENT
+            //REMOVES FIRST EMPTY ARRAY ELEMENT
+            if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift();
 
-            todoList.push(this.title); //INSERTS TODO INTO AN ARRAY
+            todoList.push(this.title);
+            descriptionList.push(this.description);
             priorityList.push(this.priority);
 
-            const dataString = (todoList) + "+" + (priorityList); //CONTAINS ALL THE DATA
+            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList); //CONTAINS ALL THE DATA
             localStorage.setItem(currentTab.id, [dataString]);
 
         } else {
             const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
+
+            // TODO DIV SECTIONS
             const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
-            const priorityList = restoredDataString[1].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
+            const descriptionList = restoredDataString[1].split(",");  //GETS THE DESCRIPTIONS OF CURRENT PROJECT
+            const priorityList = restoredDataString[2].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
 
-            if (todoList[0] === "") todoList.shift(); //REMOVES FIRST EMPTY ARRAY ELEMENT
-            if (priorityList[0] === "") priorityList.shift(); //REMOVES FIRST EMPTY ARRAY ELEMENT
+            //REMOVES FIRST EMPTY ARRAY ELEMENT
+            if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift(); 
 
-            todoList.push(this.title); //INSERTS TODO INTO AN ARRAY
-            // todoList.pop();
+            todoList.push(this.title);
+            descriptionList.push(this.description);
             priorityList.push(this.priority);
 
-            const dataString = (todoList) + "+" + (priorityList); //CONTAINS ALL THE DATA
+            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList); //CONTAINS ALL THE DATA
             localStorage.setItem(currentTab.id, [dataString]);
             oldTab = currentTab;
         };
@@ -222,8 +231,10 @@ function restoreTodos() {
             document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
 
             const currentProjectTodosArray = localStorage.getItem(e.id).split("+");
+
             const todoList = currentProjectTodosArray[0].split(",");
-            const priorityList = currentProjectTodosArray[1].split(",");
+            const descriptionList = currentProjectTodosArray[1].split(",");
+            const priorityList = currentProjectTodosArray[2].split(",");
 
             for (let i = 0; i <= (todoList.length - 1); i++) {
 
@@ -244,6 +255,11 @@ function restoreTodos() {
                     const todoTitle = document.createElement('p');
                     todoTitle.textContent = todoList[i]; //GETS CURRENT TODO TITLE
 
+                    // SECTION 2
+                    const descriptionP = document.createElement('p');
+                    descriptionP.className = 'description';
+                    descriptionP.textContent = descriptionList[i];
+
                     // SECTION 3
                     const priorityP = document.createElement('p');
                     priorityP.textContent = priorityList[i];
@@ -253,9 +269,11 @@ function restoreTodos() {
 
                     section1.appendChild(checkbox);
                     section1.append(todoTitle);
+                    section2.appendChild(descriptionP);
                     section3.appendChild(priorityP);
                     section3.appendChild(deleteButton);
                     todo.appendChild(section1);
+                    todo.appendChild(section2);
                     todo.appendChild(section3);
                     todoContainer.appendChild(todo);
                 };
@@ -279,7 +297,7 @@ form.addEventListener('submit', function(e) {
     const priority = document.querySelector('input[name="priority"]:checked');
 
     document.getElementById('popupOverlay').classList.toggle('show');
-    const newNote = new TodoMaker(title.value, priority.id);
+    const newNote = new TodoMaker(title.value, description.value, priority.id);
     newNote.create();
 
     // CLEARS TITLE
