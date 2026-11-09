@@ -95,7 +95,7 @@ createProjectButton.addEventListener('click', e => {
 // TAB CLICK
 (function tabSelectUpdate() {
     // 
-    document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd'));
+    // document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd'));
 
     // SELECTED AS CURRENT TAB
     document.querySelector('#projectsContainer > button').classList = 'projects currentTab';
@@ -289,8 +289,9 @@ function restoreTodos() {
                     const dueDateP = document.createElement('p');
                     dueDateP.className = 'dueDate';
 
-                    if (isPast(selectedDate)[i] == true) {
-                        dueDateP.textContent = 'Outdated';
+                    if (isPast(dueDateList[i]) == true) {
+                        dueDateP.textContent = 'Outdated!';
+                        dueDateP.classList = 'dueDate expiredDate';
                     } else {
                         dueDateP.textContent = result;
                     };
