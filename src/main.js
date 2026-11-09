@@ -1,6 +1,7 @@
 // IMPORT
+import { tr } from "date-fns/locale";
 import "./styles.css";
-import { formatDistance, format } from "date-fns";
+import { formatDistance, format, isPast } from "date-fns";
 
 // HTML OBJECTS
 const projectsContainer = document.getElementById('projectsContainer');
@@ -94,7 +95,7 @@ createProjectButton.addEventListener('click', e => {
 // TAB CLICK
 (function tabSelectUpdate() {
     // 
-    // document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd'));
+    document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd'));
 
     // SELECTED AS CURRENT TAB
     document.querySelector('#projectsContainer > button').classList = 'projects currentTab';
@@ -287,7 +288,12 @@ function restoreTodos() {
 
                     const dueDateP = document.createElement('p');
                     dueDateP.className = 'dueDate';
-                    dueDateP.textContent = result;
+
+                    if (isPast(selectedDate)[i] == true) {
+                        dueDateP.textContent = 'Outdated';
+                    } else {
+                        dueDateP.textContent = result;
+                    };
 
                     const priorityP = document.createElement('p');
                     priorityP.textContent = priorityList[i];
