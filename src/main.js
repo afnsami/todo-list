@@ -1,5 +1,6 @@
 // IMPORT
 import "./styles.css";
+import { formatDistance, format } from "date-fns";
 
 // HTML OBJECTS
 const projectsContainer = document.getElementById('projectsContainer');
@@ -46,10 +47,10 @@ createProjectButton.addEventListener('click', e => {
 
     // IF PROJECT NAME IS EMPTY
     if (projectName != "") {
-        const defaultTab = new ProjectMaker(projectName, ["++"]);
+        const defaultTab = new ProjectMaker(projectName, ["+++"]);
         defaultTab.create();
     } else {
-        const defaultTab = new ProjectMaker('New tab', ["++"]);
+        const defaultTab = new ProjectMaker('New tab', ["+++"]);
         defaultTab.create();
     };
 
@@ -78,7 +79,7 @@ createProjectButton.addEventListener('click', e => {
 (function restoreProjects() {
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['++']);
+        let defaultTab = new ProjectMaker('Default', ['+++']);
         defaultTab.create();
 
     } else {
@@ -92,6 +93,8 @@ createProjectButton.addEventListener('click', e => {
 
 // TAB CLICK
 (function tabSelectUpdate() {
+    // 
+    // document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd'));
 
     // SELECTED AS CURRENT TAB
     document.querySelector('#projectsContainer > button').classList = 'projects currentTab';
@@ -119,10 +122,11 @@ let oldTab = document.querySelector('.projects');
 
 // TODO MAKER
 class TodoMaker {
-    constructor(title, description, priority) {
+    constructor(title, description, priority, dueDate) {
         this.title = title;
         this.description = description;
         this.priority = priority;
+        this.dueDate = dueDate;
     };
 
     create() {
@@ -148,6 +152,16 @@ class TodoMaker {
         descriptionP.textContent = this.description;
 
         // SECTION 3
+
+        // DATE
+        const currentDate = format(new Date(), 'yyyy-MM-dd').split("-");
+        const selectedDate = this.dueDate.split("-");
+        const result = formatDistance(new Date(currentDate[0], currentDate[1], currentDate[2]), new Date(selectedDate[0], selectedDate[1], selectedDate[2]));
+
+        const dueDate = document.createElement('p');
+        dueDate.className = 'dueDate';
+        dueDate.textContent = result;
+
         const priorityP = document.createElement('p');
         priorityP.textContent = this.priority;
         priorityP.id = this.priority;
@@ -157,6 +171,7 @@ class TodoMaker {
         section1.appendChild(checkButton);
         section1.appendChild(todoTitle);
         section2.appendChild(descriptionP);
+        section3.appendChild(dueDate);
         section3.appendChild(priorityP);
         section3.appendChild(deleteButton);
         todo.appendChild(section1);
@@ -169,20 +184,23 @@ class TodoMaker {
 
         if (currentTab.id == oldTab.id) {
             const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
+            console.log(restoredDataString);
 
             // TODO DIV SECTIONS
             const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
             const descriptionList = restoredDataString[1].split(",");  //GETS THE DESCRIPTIONS OF CURRENT PROJECT
             const priorityList = restoredDataString[2].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
+            const dueDateList = restoredDataString[3].split(","); // GETS THE DUEDATE LIST
 
             //REMOVES FIRST EMPTY ARRAY ELEMENT
-            if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift();
+            if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift(); if (dueDateList[0] === "") dueDateList.shift();
 
             todoList.push(this.title);
             descriptionList.push(this.description);
             priorityList.push(this.priority);
+            dueDateList.push(this.dueDate);
 
-            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList); //CONTAINS ALL THE DATA
+            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList); //CONTAINS ALL THE DATA
             localStorage.setItem(currentTab.id, [dataString]);
 
         } else {
@@ -192,21 +210,22 @@ class TodoMaker {
             const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
             const descriptionList = restoredDataString[1].split(",");  //GETS THE DESCRIPTIONS OF CURRENT PROJECT
             const priorityList = restoredDataString[2].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
+            const dueDateList = restoredDataString[3].split(","); // GETS THE DUEDATE LIST
 
             //REMOVES FIRST EMPTY ARRAY ELEMENT
-            if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift(); 
+            if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift(); if (dueDateList[0] === "") dueDateList.shift();
 
             todoList.push(this.title);
             descriptionList.push(this.description);
             priorityList.push(this.priority);
-
-            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList); //CONTAINS ALL THE DATA
+            dueDateList.push(this.dueDate);
+            
+            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList); //CONTAINS ALL THE DATA
             localStorage.setItem(currentTab.id, [dataString]);
             oldTab = currentTab;
         };
     };
 };
-
 
 // CLICKED TODO + BUTTON
 createTodoButton.addEventListener('click', function(e) {
@@ -235,9 +254,9 @@ function restoreTodos() {
             const todoList = currentProjectTodosArray[0].split(",");
             const descriptionList = currentProjectTodosArray[1].split(",");
             const priorityList = currentProjectTodosArray[2].split(",");
+            const dueDateList = currentProjectTodosArray[3].split(",");
 
             for (let i = 0; i <= (todoList.length - 1); i++) {
-
                 if (currentProjectTodosArray[i] != "") {
                     const todo = document.createElement('div');
                     todo.className = 'todo';
@@ -261,6 +280,15 @@ function restoreTodos() {
                     descriptionP.textContent = descriptionList[i];
 
                     // SECTION 3
+                    //DATE
+                    const currentDate = format(new Date(), 'yyyy-MM-dd').split("-");
+                    const selectedDate = dueDateList[i].split("-");
+                    const result = formatDistance(new Date(currentDate[0], currentDate[1], currentDate[2]), new Date(selectedDate[0], selectedDate[1], selectedDate[2]));
+
+                    const dueDateP = document.createElement('p');
+                    dueDateP.className = 'dueDate';
+                    dueDateP.textContent = result;
+
                     const priorityP = document.createElement('p');
                     priorityP.textContent = priorityList[i];
                     priorityP.id = priorityList[i];
@@ -270,6 +298,7 @@ function restoreTodos() {
                     section1.appendChild(checkbox);
                     section1.append(todoTitle);
                     section2.appendChild(descriptionP);
+                    section3.appendChild(dueDateP);
                     section3.appendChild(priorityP);
                     section3.appendChild(deleteButton);
                     todo.appendChild(section1);
@@ -295,14 +324,14 @@ form.addEventListener('submit', function(e) {
     const title = document.getElementById('title');
     const description = document.getElementById('description');
     const priority = document.querySelector('input[name="priority"]:checked');
+    const selectedDate = document.querySelector("input[type='date']");
 
     document.getElementById('popupOverlay').classList.toggle('show');
-    const newNote = new TodoMaker(title.value, description.value, priority.id);
+    const newNote = new TodoMaker(title.value, description.value, priority.id, selectedDate.value);
     newNote.create();
 
-    // CLEARS TITLE
+    // CLEARS THE INPUTS
     title.value = '';
-    // CLEARS DESCRIPTION
     description.value = '';
 
     // CLEARS SELECTED RADIO BUTTON
