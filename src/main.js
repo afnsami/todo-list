@@ -1,15 +1,6 @@
 // IMPORT
-import { tr } from "date-fns/locale";
 import "./styles.css";
 import { formatDistance, format, isPast } from "date-fns";
-
-// HTML OBJECTS
-const projectsContainer = document.getElementById('projectsContainer');
-const todoContainer = document.getElementById('todoContainer');
-const createProjectButton = document.getElementById('createProjectButton');
-const createTodoButton = document.getElementById('addNote');
-const cancelTodoButton = document.getElementById("cancelButton");
-const form = document.getElementById('form');
 
 
 // PROJECT MAKER
@@ -25,12 +16,13 @@ class ProjectMaker {
         newTab.id = this.title;
         const newTabP = document.createElement('p');
         newTabP.textContent = this.title;
+        
         const deleteButton = document.createElement('button');
         deleteButton.className = 'deleteButton';
 
         newTab.appendChild(newTabP);
         newTab.appendChild(deleteButton);
-        projectsContainer.appendChild(newTab);
+        document.getElementById('projectsContainer').appendChild(newTab);
 
         // REMOVES THE PREVIOUS TODOS
         document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
@@ -43,37 +35,39 @@ class ProjectMaker {
 
 
 // CLICKED PROJECT + BUTTON
-createProjectButton.addEventListener('click', e => {
-    const projectName = prompt('Enter the project name:');
+(function createProjectButtonClicked() {
+    document.getElementById('createProjectButton').addEventListener('click', e => {
+        const projectName = prompt('Enter the project name:');
 
-    // IF PROJECT NAME IS EMPTY
-    if (projectName != "") {
-        const defaultTab = new ProjectMaker(projectName, ["+++"]);
-        defaultTab.create();
-    } else {
-        const defaultTab = new ProjectMaker('New tab', ["+++"]);
-        defaultTab.create();
-    };
+        // IF PROJECT NAME IS EMPTY
+        if (projectName != "") {
+            const defaultTab = new ProjectMaker(projectName, ["+++"]);
+            defaultTab.create();
+        } else {
+            const defaultTab = new ProjectMaker('New tab', ["+++"]);
+            defaultTab.create();
+        };
 
-    // TABSELECTUPDATE()
-    let allProjects = document.querySelectorAll('#projectsContainer > button');
+        // TABSELECTUPDATE()
+        let allProjects = document.querySelectorAll('#projectsContainer > button');
 
-    allProjects.forEach.call(allProjects, e => {
-        e.addEventListener('click', function() {
-            [].forEach.call(allProjects, e => {
-                if (e !== this) e.classList.remove('currentTab');
-            });
+        allProjects.forEach.call(allProjects, e => {
+            e.addEventListener('click', function() {
+                [].forEach.call(allProjects, e => {
+                    if (e !== this) e.classList.remove('currentTab');
+                });
 
-            this.classList.add('currentTab');
+                this.classList.add('currentTab');
 
-            // CHANGES CURRENT TAB TITLE
-            document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
-        }, false);
+                // CHANGES CURRENT TAB TITLE
+                document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
+            }, false);
+        });
+
+        // CLICKS THE CREATED PROJECT
+        document.getElementById('projectsContainer').lastChild.click();
     });
-
-    // CLICKS THE CREATED PROJECT
-    document.getElementById('projectsContainer').lastChild.click();
-});
+})();
 
 
 // RESTORES PROJECTS FROM LOCALSTORAGE
@@ -94,8 +88,8 @@ createProjectButton.addEventListener('click', e => {
 
 // TAB CLICK
 (function tabSelectUpdate() {
-    // 
-    // document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd'));
+    // CANT SELECT BEFORE CURRENT DATE
+    document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd'));
 
     // SELECTED AS CURRENT TAB
     document.querySelector('#projectsContainer > button').classList = 'projects currentTab';
@@ -118,8 +112,6 @@ createProjectButton.addEventListener('click', e => {
     });
 })();
 
-
-let oldTab = document.querySelector('.projects');
 
 // TODO MAKER
 class TodoMaker {
@@ -178,12 +170,12 @@ class TodoMaker {
         todo.appendChild(section1);
         todo.appendChild(section2);
         todo.appendChild(section3);
-        todoContainer.appendChild(todo);
+        document.getElementById('todoContainer').appendChild(todo);
 
         // LOCALSTORAGE
-        const currentTab = document.querySelector('.currentTab');
+        let currentTab = document.querySelector('.currentTab');
 
-        if (currentTab.id == oldTab.id) {
+        if (currentTab.id == document.querySelector('.projects').id) {
             const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
             console.log(restoredDataString);
 
@@ -223,23 +215,28 @@ class TodoMaker {
             
             const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList); //CONTAINS ALL THE DATA
             localStorage.setItem(currentTab.id, [dataString]);
-            oldTab = currentTab;
+            currentTab = document.querySelector('.projects');
         };
     };
 };
 
+
 // CLICKED TODO + BUTTON
-createTodoButton.addEventListener('click', function(e) {
-    const overlay = document.getElementById('popupOverlay');
-    overlay.classList.toggle('show');
-});
+(function addNoteClicked() {
+    document.getElementById('addNote').addEventListener('click', function(e) {
+        const overlay = document.getElementById('popupOverlay');
+        overlay.classList.toggle('show');
+    });
+})();
 
 
 // WHEN FORM IS CANCELLED
-cancelTodoButton.addEventListener('click', function(e) {
-    const overlay = document.getElementById('popupOverlay');
-    overlay.classList.toggle('show');
-});
+(function cancelButtonClicked() {
+    document.getElementById("cancelButton").addEventListener('click', function(e) {
+        const overlay = document.getElementById('popupOverlay');
+        overlay.classList.toggle('show');
+    });
+})();
 
 
 // RESTORES TODOS
@@ -251,7 +248,6 @@ function restoreTodos() {
             document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
 
             const currentProjectTodosArray = localStorage.getItem(e.id).split("+");
-
             const todoList = currentProjectTodosArray[0].split(",");
             const descriptionList = currentProjectTodosArray[1].split(",");
             const priorityList = currentProjectTodosArray[2].split(",");
@@ -289,6 +285,7 @@ function restoreTodos() {
                     const dueDateP = document.createElement('p');
                     dueDateP.className = 'dueDate';
 
+                    // CHECK IF DATE IS EXPIRED
                     if (isPast(dueDateList[i]) == true) {
                         dueDateP.textContent = 'Outdated!';
                         dueDateP.classList = 'dueDate expiredDate';
@@ -311,7 +308,7 @@ function restoreTodos() {
                     todo.appendChild(section1);
                     todo.appendChild(section2);
                     todo.appendChild(section3);
-                    todoContainer.appendChild(todo);
+                    document.getElementById('todoContainer').appendChild(todo);
                 };
             };
         });
@@ -320,32 +317,45 @@ function restoreTodos() {
     // AUTO CLICKS THE FIRST TAB
     document.querySelector('#projectsContainer > button').click();
 };
-
 restoreTodos();
 
 
 // WHEN ADD BUTTON IS CLICKED
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
+(function formAddButtonClicked() {
+    document.getElementById('form').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    const title = document.getElementById('title');
-    const description = document.getElementById('description');
-    const priority = document.querySelector('input[name="priority"]:checked');
-    const selectedDate = document.querySelector("input[type='date']");
+        const title = document.getElementById('title');
+        const description = document.getElementById('description');
+        const priority = document.querySelector('input[name="priority"]:checked');
+        const selectedDate = document.querySelector("input[type='date']");
 
-    document.getElementById('popupOverlay').classList.toggle('show');
-    const newNote = new TodoMaker(title.value, description.value, priority.id, selectedDate.value);
-    newNote.create();
+        document.getElementById('popupOverlay').classList.toggle('show');
+        const newNote = new TodoMaker(title.value, description.value, priority.id, selectedDate.value);
+        newNote.create();
 
-    // CLEARS THE INPUTS
-    title.value = '';
-    description.value = '';
+        // CLEARS THE INPUTS
+        title.value = '';
+        description.value = '';
+        selectedDate.value = '';
 
-    // CLEARS SELECTED RADIO BUTTON
-    // let radioButtons = document.getElementsByTagName("input");
-    // for (let i = 0; i < radioButtons.length; i++) {
-    //     if (radioButtons[i].type == "radio") {
-    //         radioButtons[i].checked = false;
-    //     }
-    // };
-});
+        // CLEARS SELECTED RADIO BUTTON
+        // let radioButtons = document.getElementsByTagName("input");
+        // for (let i = 0; i < radioButtons.length; i++) {
+        //     if (radioButtons[i].type == "radio") {
+        //         radioButtons[i].checked = false;
+        //     }
+        // };
+    });
+})();
+
+
+(function deleteProjectButton() {
+    let allProjects = document.querySelectorAll('#projectsContainer > button');
+
+    allProjects.forEach(e => {
+        e.lastChild.addEventListener('click', function() {
+            localStorage.removeItem(e.id);
+        });
+    });
+})();
