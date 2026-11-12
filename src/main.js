@@ -221,7 +221,7 @@ class TodoMaker {
             this.classList.add('currentTab');
 
             // CHANGES CURRENT TAB TITLE
-            // document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
+            document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
         }, false);
     });
 })();
@@ -345,7 +345,7 @@ restoreTodos();
         e.lastChild.addEventListener('click', function() {
             e.remove();
             localStorage.removeItem(e.id);
-            document.querySelector('#projectsContainer > button').click();
+            document.querySelector('.project').click();
         });
     });
 })();
