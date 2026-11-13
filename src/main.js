@@ -185,21 +185,27 @@ class TodoMaker {
 
 // RESTORES PROJECTS FROM LOCALSTORAGE
 (function restoreProjects() {
+
     // IF LOCALSTORAGE IS EMPTY
     if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['+++']);
+        let defaultTab = new ProjectMaker('Default', ['A task+1+Low+2026-11-22']);
         defaultTab.create();
-        let defaultTab2 = new ProjectMaker('Default 2', ['+++']);
+
+        let defaultTab2 = new ProjectMaker('Default 2', ['Default task 2+2+Medium+2026-11-23']);
         defaultTab2.create();
-        let defaultTab3 = new ProjectMaker('Default 3', ['+++']);
+
+        let defaultTab3 = new ProjectMaker('Default 3', ['Default task 3+3+High+2026-11-24']);
         defaultTab3.create();
+
+        let defaultTab4 = new ProjectMaker('Default 4', ['Default task 4+4+High+2026-11-24']);
+        defaultTab4.create();
 
     } else {
         for (let i = 0; i <= ((localStorage.length) - 1); i++) {
             let restoreTab = new ProjectMaker(localStorage.key(i), localStorage.getItem(localStorage.key(i)));
             restoreTab.create();
         };
-    }
+    };
 })();
 
 // TAB CLICK
@@ -221,7 +227,7 @@ class TodoMaker {
             this.classList.add('currentTab');
 
             // CHANGES CURRENT TAB TITLE
-            document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
+            document.getElementById('currentTabTitle').textContent = this.id;
         }, false);
     });
 })();
@@ -231,73 +237,92 @@ class TodoMaker {
 function restoreTodos() {
     document.querySelectorAll('#projectsContainer > button').forEach(e => {
         e.addEventListener('click', function() {
-            // REMOVES THE PREVIOUS TODOS
-            document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
 
-            const currentProjectTodosArray = localStorage.getItem(e.id).split("+");
-            const todoList = currentProjectTodosArray[0].split(",");
-            const descriptionList = currentProjectTodosArray[1].split(",");
-            const priorityList = currentProjectTodosArray[2].split(",");
-            const dueDateList = currentProjectTodosArray[3].split(",");
+            if (localStorage.key(0) != undefined) {
+                
+                // REMOVES THE PREVIOUS TODOS
+                document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
 
-            for (let i = 0; i <= (todoList.length - 1); i++) {
-                if (currentProjectTodosArray[i] != "") {
-                    const todo = document.createElement('div');
-                    todo.className = 'todo';
+                let currentProjectTodosArray = [];
 
-                    const section1 = document.createElement('div');
-                    section1.className = 'section1';
-                    const section2 = document.createElement('div');
-                    section2.className = 'section2';
-                    const section3 = document.createElement('div');
-                    section3.className = 'section3';
+                if (localStorage.getItem(e.id) == undefined) {
+                    currentProjectTodosArray = localStorage.getItem(localStorage.key(0)).split("+"); //GETS THE DATA FROM LOCALSTORAGE
+                    document.querySelectorAll('#projectsContainer > button')[0].classList = 'projects currentTab';
 
-                    // SECTION 1
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    const todoTitle = document.createElement('p');
-                    todoTitle.textContent = todoList[i]; //GETS CURRENT TODO TITLE
-
-                    // SECTION 2
-                    const descriptionP = document.createElement('p');
-                    descriptionP.className = 'description';
-                    descriptionP.textContent = descriptionList[i];
-
-                    // SECTION 3
-                    //DATE
-                    const currentDate = format(new Date(), 'yyyy-MM-dd').split("-");
-                    const selectedDate = dueDateList[i].split("-");
-                    const result = formatDistance(new Date(currentDate[0], currentDate[1], currentDate[2]), new Date(selectedDate[0], selectedDate[1], selectedDate[2]));
-
-                    const dueDateP = document.createElement('p');
-                    dueDateP.className = 'dueDate';
-
-                    // CHECK IF DATE IS EXPIRED
-                    if (isPast(dueDateList[i]) == true) {
-                        dueDateP.textContent = 'Outdated!';
-                        dueDateP.classList = 'dueDate expiredDate';
-                    } else {
-                        dueDateP.textContent = result;
-                    };
-
-                    const priorityP = document.createElement('p');
-                    priorityP.textContent = priorityList[i];
-                    priorityP.id = priorityList[i];
-                    const deleteButton = document.createElement('button');
-                    deleteButton.className = 'deleteButton';
-
-                    section1.appendChild(checkbox);
-                    section1.append(todoTitle);
-                    section2.appendChild(descriptionP);
-                    section3.appendChild(dueDateP);
-                    section3.appendChild(priorityP);
-                    section3.appendChild(deleteButton);
-                    todo.appendChild(section1);
-                    todo.appendChild(section2);
-                    todo.appendChild(section3);
-                    document.getElementById('todoContainer').appendChild(todo);
+                } else {
+                    currentProjectTodosArray = localStorage.getItem(e.id).split("+"); //GETS THE DATA FROM LOCALSTORAGE
                 };
-            };
+
+                const todoList = currentProjectTodosArray[0].split(",");
+                const descriptionList = currentProjectTodosArray[1].split(",");
+                const priorityList = currentProjectTodosArray[2].split(",");
+                const dueDateList = currentProjectTodosArray[3].split(",");
+
+                for (let i = 0; i <= (todoList.length - 1); i++) {
+                    if (currentProjectTodosArray[i] != "") {
+                        const todo = document.createElement('div');
+                        todo.className = 'todo';
+
+                        const section1 = document.createElement('div');
+                        section1.className = 'section1';
+                        const section2 = document.createElement('div');
+                        section2.className = 'section2';
+                        const section3 = document.createElement('div');
+                        section3.className = 'section3';
+
+                        // SECTION 1
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        const todoTitle = document.createElement('p');
+                        todoTitle.textContent = todoList[i]; //GETS CURRENT TODO TITLE
+
+                        // SECTION 2
+                        const descriptionP = document.createElement('p');
+                        descriptionP.className = 'description';
+                        descriptionP.textContent = descriptionList[i];
+
+                        // SECTION 3
+                        //DATE
+                        const currentDate = format(new Date(), 'yyyy-MM-dd').split("-");
+                        const selectedDate = dueDateList[i].split("-");
+                        const result = formatDistance(new Date(currentDate[0], currentDate[1], currentDate[2]), new Date(selectedDate[0], selectedDate[1], selectedDate[2]));
+
+                        const dueDateP = document.createElement('p');
+                        dueDateP.className = 'dueDate';
+
+                        // CHECK IF DATE IS EXPIRED
+                        if (isPast(dueDateList[i]) == true) {
+                            dueDateP.textContent = 'Outdated!';
+                            dueDateP.classList = 'dueDate expiredDate';
+                        } else {
+                            dueDateP.textContent = result;
+                        };
+
+                        const priorityP = document.createElement('p');
+                        priorityP.textContent = priorityList[i];
+                        priorityP.id = priorityList[i];
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'deleteButton';
+
+                        section1.appendChild(checkbox);
+                        section1.append(todoTitle);
+                        section2.appendChild(descriptionP);
+                        section3.appendChild(dueDateP);
+                        section3.appendChild(priorityP);
+                        section3.appendChild(deleteButton);
+                        todo.appendChild(section1);
+                        todo.appendChild(section2);
+                        todo.appendChild(section3);
+                        document.getElementById('todoContainer').appendChild(todo);
+                    };
+                };
+
+            } else {
+                // REMOVES THE PREVIOUS TODOS
+                document.querySelectorAll('#todoContainer > .todo').forEach(e => e.remove());
+            }
+
+
             
         });
     });
@@ -345,7 +370,17 @@ restoreTodos();
         e.lastChild.addEventListener('click', function() {
             e.remove();
             localStorage.removeItem(e.id);
-            document.querySelector('.project').click();
+        });
+    });
+})();
+
+
+(function deleteTodoButton() {
+    let allTodos = document.querySelectorAll('#button > .deleteButton');
+
+    allTodos.forEach(e => {
+        e.lastChild.addEventListener('click', function() {
+            console.log(true);
         });
     });
 })();
