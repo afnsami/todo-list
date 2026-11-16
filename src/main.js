@@ -1,6 +1,6 @@
 // IMPORT
-import "./styles.css";
 import { formatDistance, format, isPast } from "date-fns";
+import "./styles.css";
 import ProjectMaker from "./projectMaker.js";
 import TodoMaker from "./TodoMaker.js";
 
@@ -19,9 +19,17 @@ import TodoMaker from "./TodoMaker.js";
             defaultTab.create();
         };
 
-        // TABSELECTUPDATE()
         let allProjects = document.querySelectorAll('#projectsContainer > button');
 
+        // ADDS NEWLY CREATED PROJECT TO BE ABLE TO DELETE
+        allProjects.forEach(e => {
+            e.lastChild.addEventListener('click', function() {
+                e.remove();
+                localStorage.removeItem(e.id);
+            });
+        });
+
+        // TABSELECTUPDATE()
         allProjects.forEach.call(allProjects, e => {
             e.addEventListener('click', function() {
                 [].forEach.call(allProjects, e => {
@@ -37,36 +45,13 @@ import TodoMaker from "./TodoMaker.js";
 
         // CLICKS THE CREATED PROJECT
         document.getElementById('projectsContainer').lastChild.click();
-
-        // ADDS NEWLY CREATED PROJECT TO BE ABLE TO DELETE
-        allProjects.forEach(e => {
-            e.lastChild.addEventListener('click', function() {
-                e.remove();
-                localStorage.removeItem(e.id);
-            });
-        });
     });
 })();
 
 
 // RESTORES PROJECTS FROM LOCALSTORAGE
 (function restoreProjects() {
-
-    // IF LOCALSTORAGE IS EMPTY
-    if (localStorage.length == 0) {
-        let defaultTab = new ProjectMaker('Default', ['A task+1+Low+2026-11-22']);
-        defaultTab.create();
-
-        let defaultTab2 = new ProjectMaker('Default 2', ['Default task 2+2+Medium+2026-11-23']);
-        defaultTab2.create();
-
-        let defaultTab3 = new ProjectMaker('Default 3', ['Default task 3+3+High+2026-11-24']);
-        defaultTab3.create();
-
-        let defaultTab4 = new ProjectMaker('Default 4', ['Default task 4+4+High+2026-11-24']);
-        defaultTab4.create();
-
-    } else {
+    if (localStorage.length != 0) {
         for (let i = 0; i <= ((localStorage.length) - 1); i++) {
             let restoreTab = new ProjectMaker(localStorage.key(i), localStorage.getItem(localStorage.key(i)));
             restoreTab.create();
@@ -77,10 +62,13 @@ import TodoMaker from "./TodoMaker.js";
 
 // TAB CLICK
 (function tabSelectUpdate() {
-
     // SELECTED AS CURRENT TAB
-    document.querySelector('#projectsContainer > button').classList = 'projects currentTab';
-    document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
+    if (localStorage.length != 0) {
+        document.querySelector('#projectsContainer > button').classList = 'projects currentTab';
+        document.getElementById('currentTabTitle').textContent = document.getElementsByClassName('currentTab')[0].querySelector('p').textContent;
+    } else {
+        document.getElementById('currentTabTitle').textContent = 'Create projects to add todos';
+    };
 
     let allProjects = document.querySelectorAll('#projectsContainer > button');
 
@@ -100,7 +88,7 @@ import TodoMaker from "./TodoMaker.js";
 
 
 // RESTORES TODOS
-function restoreTodos() {
+(function restoreTodos() {
     document.querySelectorAll('#projectsContainer > button').forEach(e => {
         e.addEventListener('click', function() {
             if (localStorage.key(0) != undefined) {
@@ -192,10 +180,8 @@ function restoreTodos() {
     });
 
     // AUTO CLICKS THE FIRST TAB
-    document.querySelector('#projectsContainer > button').click();
-};
-
-restoreTodos();
+    if (localStorage.length != 0) document.querySelector('#projectsContainer > button').click();
+})();
 
 
 // WHEN ADD BUTTON IS CLICKED
@@ -227,17 +213,15 @@ restoreTodos();
 })();
 
 
+// WHEN PROJECT DELETE BUTTON IS CLICKED
 (function deleteProjectButton() {
-    let allProjects = document.querySelectorAll('#projectsContainer > button');
-
-    allProjects.forEach(e => {
+    document.querySelectorAll('#projectsContainer > button').forEach(e => {
         e.lastChild.addEventListener('click', function() {
             e.remove();
             localStorage.removeItem(e.id);
         });
     });
 })();
-
 
 // CLICKED TODO + BUTTON
 (function addNoteClicked() {
