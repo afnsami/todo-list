@@ -1,5 +1,5 @@
 // IMPORT
-import { formatDistance, format, isPast } from "date-fns";
+import { formatDistance, format, isPast, add } from "date-fns";
 import "./styles.css";
 import ProjectMaker from "./projectMaker.js";
 import TodoMaker from "./TodoMaker.js";
@@ -8,6 +8,19 @@ import TodoMaker from "./TodoMaker.js";
 // CLICKED PROJECT + BUTTON
 (function createProjectButtonClicked() {
     document.getElementById('createProjectButton').addEventListener('click', e => {
+
+        // ADD NOTE BUTTON IS SHOWN
+        if (localStorage.length == 0) {
+            document.getElementById('addNote').style.display = 'block';
+
+            document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd')); // CANT SELECT BEFORE CURRENT DATE
+
+            document.getElementById('addNote').addEventListener('click', function() {
+                const overlay = document.getElementById('popupOverlay');
+                overlay.classList.toggle('show');
+            });
+        };
+
         const projectName = prompt('Enter the project name:');
 
         // IF PROJECT NAME IS EMPTY
@@ -20,14 +33,6 @@ import TodoMaker from "./TodoMaker.js";
         };
 
         let allProjects = document.querySelectorAll('#projectsContainer > button');
-
-        // ADDS NEWLY CREATED PROJECT TO BE ABLE TO DELETE
-        allProjects.forEach(e => {
-            e.lastChild.addEventListener('click', function() {
-                e.remove();
-                localStorage.removeItem(e.id);
-            });
-        });
 
         // TABSELECTUPDATE()
         allProjects.forEach.call(allProjects, e => {
@@ -45,6 +50,19 @@ import TodoMaker from "./TodoMaker.js";
 
         // CLICKS THE CREATED PROJECT
         document.getElementById('projectsContainer').lastChild.click();
+
+        // ADDS NEWLY CREATED PROJECT TO BE ABLE TO DELETE
+        allProjects.forEach(e => {
+            e.lastChild.addEventListener('click', function() {
+                e.remove();
+                localStorage.removeItem(e.id);
+
+                if (localStorage.length == 0) {
+                    document.getElementById('addNote').style.display = 'none';
+                };
+            });
+        });
+        
     });
 })();
 
@@ -219,19 +237,27 @@ import TodoMaker from "./TodoMaker.js";
         e.lastChild.addEventListener('click', function() {
             e.remove();
             localStorage.removeItem(e.id);
+
+            if (localStorage.length == 0) {
+                document.getElementById('addNote').style.display = 'none';
+            };
         });
     });
 })();
 
 // CLICKED TODO + BUTTON
 (function addNoteClicked() {
-    // CANT SELECT BEFORE CURRENT DATE
-    document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd'));
+    if (localStorage.length == 0) {
+        document.getElementById('addNote').style.display = 'none';
 
-    document.getElementById('addNote').addEventListener('click', function(e) {
-        const overlay = document.getElementById('popupOverlay');
-        overlay.classList.toggle('show');
-    });
+    } else {
+        document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd')); // CANT SELECT BEFORE CURRENT DATE
+
+        document.getElementById('addNote').addEventListener('click', function(e) {
+            const overlay = document.getElementById('popupOverlay');
+            overlay.classList.toggle('show');
+        });
+    };
 })();
 
 
