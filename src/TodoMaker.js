@@ -65,7 +65,6 @@ class TodoMaker {
 
         if (currentTab.id == document.querySelector('.projects').id) {
             const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
-            console.log(restoredDataString);
 
             // TODO DIV SECTIONS
             const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
