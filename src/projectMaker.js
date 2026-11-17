@@ -10,12 +10,22 @@ class ProjectMaker {
         newTab.id = this.title;
         const newTabP = document.createElement('p');
         newTabP.textContent = this.title;
-        
+
+        const todoNumber = document.createElement('p');
+        todoNumber.id = 'todoNumber';
+        todoNumber.textContent = '0';
+
         const deleteButton = document.createElement('button');
         deleteButton.className = 'deleteButton';
 
+        const buttonTodoNumberContainer = document.createElement('div');
+        buttonTodoNumberContainer.id = 'buttonTodoNumberContainer';
+
+        buttonTodoNumberContainer.appendChild(todoNumber);
+        buttonTodoNumberContainer.appendChild(deleteButton);
+
         newTab.appendChild(newTabP);
-        newTab.appendChild(deleteButton);
+        newTab.appendChild(buttonTodoNumberContainer);
         document.getElementById('projectsContainer').appendChild(newTab);
 
         // REMOVES THE PREVIOUS TODOS
