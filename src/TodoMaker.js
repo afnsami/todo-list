@@ -80,7 +80,9 @@ class TodoMaker {
             priorityList.push(this.priority);
             dueDateList.push(this.dueDate);
 
-            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList); //CONTAINS ALL THE DATA
+            document.getElementById(document.getElementsByClassName('currentTab')[0].id).querySelector('#todoNumber').textContent = todoList.length;
+
+            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList) + "+" + (todoList.length); //CONTAINS ALL THE DATA
             localStorage.setItem(currentTab.id, [dataString]);
 
         } else {
@@ -99,8 +101,9 @@ class TodoMaker {
             descriptionList.push(this.description);
             priorityList.push(this.priority);
             dueDateList.push(this.dueDate);
+            document.getElementById(document.getElementsByClassName('currentTab')[0].id).querySelector('#todoNumber').textContent = todoList.length;
             
-            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList); //CONTAINS ALL THE DATA
+            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList) + "+" + (todoList.length); //CONTAINS ALL THE DATA
             localStorage.setItem(currentTab.id, [dataString]);
             currentTab = document.querySelector('.projects');
         };
