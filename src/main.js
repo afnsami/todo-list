@@ -25,10 +25,10 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
 
         // IF PROJECT NAME IS EMPTY
         if (projectName != "") {
-            const defaultTab = new ProjectMaker(projectName, ["+++"]);
+            const defaultTab = new ProjectMaker(projectName, ["++++"]);
             defaultTab.create();
         } else {
-            const defaultTab = new ProjectMaker('New tab', ["+++"]);
+            const defaultTab = new ProjectMaker('New tab', ["++++"]);
             defaultTab.create();
         };
 
