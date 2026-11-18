@@ -13,7 +13,6 @@ class ProjectMaker {
 
         const todoNumber = document.createElement('p');
         todoNumber.id = 'todoNumber';
-        todoNumber.textContent = '0';
 
         const deleteButton = document.createElement('button');
         deleteButton.className = 'deleteButton';
@@ -33,6 +32,8 @@ class ProjectMaker {
 
         // LOCAL STORAGE
         localStorage.setItem(this.title, this.data);
+
+        todoNumber.textContent = localStorage.getItem(this.title).split('+')[4]; // APPENDS THE TODO NUMBER AT THE END
     };
 };
 
