@@ -33,7 +33,12 @@ class ProjectMaker {
         // LOCAL STORAGE
         localStorage.setItem(this.title, this.data);
 
-        todoNumber.textContent = localStorage.getItem(this.title).split('+')[4]; // APPENDS THE TODO NUMBER AT THE END
+        // APPENDS THE TODO NUMBER AT THE END OF THE STRING
+        if (localStorage.getItem(this.title).split('+')[4] != 0) {
+            todoNumber.textContent = localStorage.getItem(this.title).split('+')[4];
+        } else {
+            todoNumber.textContent = '0';
+        };
     };
 };
 
