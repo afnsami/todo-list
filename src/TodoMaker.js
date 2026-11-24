@@ -71,18 +71,20 @@ class TodoMaker {
             const descriptionList = restoredDataString[1].split(",");  //GETS THE DESCRIPTIONS OF CURRENT PROJECT
             const priorityList = restoredDataString[2].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
             const dueDateList = restoredDataString[3].split(","); // GETS THE DUEDATE LIST
+            const checkedList = restoredDataString[4].split(","); // GETS THE CHECKED LIST
 
             //REMOVES FIRST EMPTY ARRAY ELEMENT
-            if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift(); if (dueDateList[0] === "") dueDateList.shift();
+            if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift(); if (dueDateList[0] === "") dueDateList.shift(); if (checkedList[0] === "") checkedList.shift();
 
             todoList.push(this.title);
             descriptionList.push(this.description);
             priorityList.push(this.priority);
             dueDateList.push(this.dueDate);
+            checkedList.push('unchecked');
 
             document.getElementById(document.getElementsByClassName('currentTab')[0].id).querySelector('#todoNumber').textContent = todoList.length;
 
-            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList) + "+" + (todoList.length); //CONTAINS ALL THE DATA
+            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList) + "+" + (checkedList) + "+" + (todoList.length); //CONTAINS ALL THE DATA
             localStorage.setItem(currentTab.id, [dataString]);
 
         } else {
