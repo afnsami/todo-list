@@ -34,8 +34,8 @@ class ProjectMaker {
         localStorage.setItem(this.title, this.data);
 
         // APPENDS THE TODO NUMBER AT THE END OF THE STRING
-        if (localStorage.getItem(this.title).split('+')[4] != 0) {
-            todoNumber.textContent = localStorage.getItem(this.title).split('+')[4];
+        if (localStorage.getItem(this.title).split('+')[5] != 0) {
+            todoNumber.textContent = localStorage.getItem(this.title).split('+')[5];
         } else {
             todoNumber.textContent = '0';
         };
