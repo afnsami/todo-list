@@ -25,10 +25,10 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
 
         // IF PROJECT NAME IS EMPTY
         if (projectName != "") {
-            const defaultTab = new ProjectMaker(projectName, ["++++"]);
+            const defaultTab = new ProjectMaker(projectName, ["+++++"]);
             defaultTab.create();
         } else {
-            const defaultTab = new ProjectMaker('New tab', ["++++"]);
+            const defaultTab = new ProjectMaker('New tab', ["+++++"]);
             defaultTab.create();
         };
 
@@ -58,6 +58,7 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
                 localStorage.removeItem(e.id);
 
                 if (localStorage.length == 0) {
+                    document.getElementById("dueDate").setAttribute("min", format(new Date(), 'yyyy-MM-dd')); // CANT SELECT BEFORE CURRENT DATE
                     document.getElementById('addNote').style.display = 'none';
 
                     document.getElementById('addNote').addEventListener('click', function() {
@@ -222,6 +223,38 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
                     overlay.classList.toggle('show');
                 });
             };
+        });
+    });
+})();
+
+
+
+(function todoCheckedListener() {
+
+    const checkList = [];
+    const todoList = document.querySelectorAll('#todoContainer > .todo');
+
+    todoList.forEach(e => {
+        checkList.push(e.firstChild.firstChild);
+    });
+
+    checkList.forEach(e => {
+        e.addEventListener('click', function() {
+
+            const currentTab = document.querySelector('.currentTab');
+
+            const restoredDataString = localStorage.getItem(currentTab.id).split("+");
+            const todoList = restoredDataString[0].split(",");
+            const descriptionList = restoredDataString[1].split(",");
+            const priorityList = restoredDataString[2].split(",");
+            const dueDateList = restoredDataString[3].split(",");
+            let checkedList = restoredDataString[4].split(",");
+
+            checkedList.splice(todoList.indexOf(e.parentNode.querySelector('p').textContent), 1, 'checked');;
+
+            const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList) + "+" + (checkedList) + "+" + (todoList.length);
+            localStorage.setItem(currentTab.id, [dataString]);
+
         });
     });
 })();
