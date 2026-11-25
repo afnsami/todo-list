@@ -67,11 +67,11 @@ class TodoMaker {
             const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
 
             // TODO DIV SECTIONS
-            const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
-            const descriptionList = restoredDataString[1].split(",");  //GETS THE DESCRIPTIONS OF CURRENT PROJECT
-            const priorityList = restoredDataString[2].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
-            const dueDateList = restoredDataString[3].split(","); // GETS THE DUEDATE LIST
-            const checkedList = restoredDataString[4].split(","); // GETS THE CHECKED LIST
+            const todoList = restoredDataString[0].split(",");
+            const descriptionList = restoredDataString[1].split(",");
+            const priorityList = restoredDataString[2].split(",");
+            const dueDateList = restoredDataString[3].split(",");
+            const checkedList = restoredDataString[4].split(",");
 
             //REMOVES FIRST EMPTY ARRAY ELEMENT
             if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift(); if (dueDateList[0] === "") dueDateList.shift(); if (checkedList[0] === "") checkedList.shift();
@@ -82,6 +82,7 @@ class TodoMaker {
             dueDateList.push(this.dueDate);
             checkedList.push('false');
 
+            // SETS THE PROJECTS TODO NUMBER
             document.getElementById(document.getElementsByClassName('currentTab')[0].id).querySelector('#todoNumber').textContent = todoList.length;
 
             const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList) + "+" + (checkedList) + "+" + (todoList.length); //CONTAINS ALL THE DATA
@@ -91,11 +92,11 @@ class TodoMaker {
             const restoredDataString = localStorage.getItem(document.querySelector('.currentTab').id).split("+");
 
             // TODO DIV SECTIONS
-            const todoList = restoredDataString[0].split(","); //GETS THE TODOS OF CURRENT PROJECT
-            const descriptionList = restoredDataString[1].split(",");  //GETS THE DESCRIPTIONS OF CURRENT PROJECT
-            const priorityList = restoredDataString[2].split(","); //GETS THE PRIORITIES OF CURRENT PROJECT
-            const dueDateList = restoredDataString[3].split(","); // GETS THE DUEDATE LIST
-            const checkedList = restoredDataString[4].split(","); // GETS THE CHECKED LIST
+            const todoList = restoredDataString[0].split(",");
+            const descriptionList = restoredDataString[1].split(",");
+            const priorityList = restoredDataString[2].split(",");
+            const dueDateList = restoredDataString[3].split(",");
+            const checkedList = restoredDataString[4].split(",");
 
             //REMOVES FIRST EMPTY ARRAY ELEMENT
             if (todoList[0] === "") todoList.shift(); if (descriptionList[0] === "") descriptionList.shift(); if (priorityList[0] === "") priorityList.shift(); if (dueDateList[0] === "") dueDateList.shift(); if (checkedList[0] === "") checkedList.shift();
