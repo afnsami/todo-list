@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import TodoMaker from "./TodoMaker.js";
-
+import { todoCheckedListener } from './Todo.js'
 
 // CLICKED TODO + BUTTON
 function addNoteClicked() {
@@ -38,11 +38,10 @@ function formAddButtonClicked() {
         selectedDate.value = '';
         // CLEARS SELECTED RADIO BUTTON
         let radioButtons = document.getElementsByTagName("input");
-        for (let i = 0; i < radioButtons.length; i++) {
-            if (radioButtons[i].type == "radio") {
-                radioButtons[i].checked = false;
-            }
-        };
+        for (let i = 0; i < radioButtons.length; i++) if (radioButtons[i].type == "radio") radioButtons[i].checked = false;
+
+        // NEW TODO IS AVAILABLE TO BE CHECKED
+        todoCheckedListener();
     });
 };
 
