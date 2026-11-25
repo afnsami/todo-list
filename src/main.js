@@ -136,6 +136,7 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
                 const descriptionList = currentProjectTodosArray[1].split(",");
                 const priorityList = currentProjectTodosArray[2].split(",");
                 const dueDateList = currentProjectTodosArray[3].split(",");
+                const checkedList = currentProjectTodosArray[4].split(",");
 
                 for (let i = 0; i <= (todoList.length - 1); i++) {
                     if (currentProjectTodosArray[i] != "") {
@@ -150,10 +151,16 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
                         section3.className = 'section3';
 
                         // SECTION 1
+                        const todoTitle = document.createElement('p');
+                        todoTitle.textContent = todoList[i];
+
                         const checkbox = document.createElement('input');
                         checkbox.type = 'checkbox';
-                        const todoTitle = document.createElement('p');
-                        todoTitle.textContent = todoList[i]; //GETS CURRENT TODO TITLE
+                        if (checkedList[i] == 'true') {
+                            checkbox.click(); 
+                            todoTitle.style.textDecoration = 'line-through';
+                            todoTitle.style.opacity = '30%';
+                        };
 
                         // SECTION 2
                         const descriptionP = document.createElement('p');
@@ -230,7 +237,6 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
 
 
 (function todoCheckedListener() {
-
     const checkList = [];
     const todoList = document.querySelectorAll('#todoContainer > .todo');
 
@@ -240,8 +246,10 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
 
     checkList.forEach(e => {
         e.addEventListener('click', function() {
-
-            const currentTab = document.querySelector('.currentTab');
+            
+            console.log('clicked');
+            
+            const currentTab = document.getElementsByClassName('currentTab')[0];
 
             const restoredDataString = localStorage.getItem(currentTab.id).split("+");
             const todoList = restoredDataString[0].split(",");
@@ -250,11 +258,18 @@ import { addNoteClicked, formAddButtonClicked, cancelButtonClicked } from "./for
             const dueDateList = restoredDataString[3].split(",");
             let checkedList = restoredDataString[4].split(",");
 
-            checkedList.splice(todoList.indexOf(e.parentNode.querySelector('p').textContent), 1, 'checked');;
+            if (checkedList[todoList.indexOf(e.parentNode.querySelector('p').textContent)] == 'false') {
+                checkedList.splice(todoList.indexOf(e.parentNode.querySelector('p').textContent), 1, 'true');
+                e.parentNode.querySelector('p').style.textDecoration = 'line-through';
+                e.parentNode.querySelector('p').style.opacity = '30%';
+            } else {
+                checkedList.splice(todoList.indexOf(e.parentNode.querySelector('p').textContent), 1, 'false');
+                e.parentNode.querySelector('p').style.textDecoration = 'none';
+                e.parentNode.querySelector('p').style.opacity = '100%';
+            };
 
             const dataString = (todoList) + "+" + (descriptionList) + "+" + (priorityList) + "+" + (dueDateList) + "+" + (checkedList) + "+" + (todoList.length);
             localStorage.setItem(currentTab.id, [dataString]);
-
         });
     });
 })();
